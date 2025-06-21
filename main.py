@@ -5,12 +5,17 @@ from telegram import (
     InputMediaPhoto,
 )
 from telegram.ext import (
-    ApplicationBuilder, CommandHandler, MessageHandler, CallbackQueryHandler,
-    ConversationHandler, InlineQueryHandler, filters
+    ApplicationBuilder,
+    CommandHandler,
+    MessageHandler,
+    CallbackQueryHandler,
+    ConversationHandler,
+    InlineQueryHandler,
+    filters,
+    ContextTypes   # ✅ This line added
 )
-from telegram.ext import InlineQueryHandler
-
 from telegram import InlineQueryResultArticle, InputTextMessageContent
+
 import uuid
 
 import json
