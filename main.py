@@ -566,7 +566,8 @@ def main():
     application.add_handler(CallbackQueryHandler(button_handler))
     application.add_handler(InlineQueryHandler(inlinequery))
 
-    app = Flask(__name__)
+    # === Flask App for Render Uptime ===
+app = Flask(__name__)
 
 @app.route('/')
 def home():
@@ -575,6 +576,7 @@ def home():
 def run_flask():
     app.run(host="0.0.0.0", port=8080)
 
+# === Main Entry Point ===
 if __name__ == "__main__":
     threading.Thread(target=run_flask, daemon=True).start()
     main()
