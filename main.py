@@ -5,13 +5,8 @@ from telegram import (
     InputMediaPhoto,
 )
 from telegram.ext import (
-    Application,
-    CommandHandler,
-    MessageHandler,
-    CallbackQueryHandler,
-    ConversationHandler,
-    ContextTypes,
-    filters,
+    ApplicationBuilder, CommandHandler, MessageHandler, CallbackQueryHandler,
+    ConversationHandler, InlineQueryHandler, filters
 )
 from telegram.ext import InlineQueryHandler
 
@@ -532,9 +527,8 @@ async def broadcast_send(update: Update, context: ContextTypes.DEFAULT_TYPE):
     await update.message.reply_text(f"✅ Broadcast complete.\nSent: {sent}\nFailed: {failed}")
     return ConversationHandler.END
 
-
 def main():
-    application = Application.builder().token(API_TOKEN).build()
+    application = ApplicationBuilder().token(API_TOKEN).build()
 
     addpost_handler = ConversationHandler(
         entry_points=[CommandHandler("addpost", addpost)],
@@ -566,8 +560,7 @@ def main():
     application.add_handler(CallbackQueryHandler(button_handler))
     application.add_handler(InlineQueryHandler(inlinequery))
 
-
-    print("Bot is running...")
+    print("✅ Bot is running...")
     application.run_polling()
 
 if __name__ == "__main__":
