@@ -15,7 +15,7 @@ from telegram.ext import (
     ContextTypes   # ✅ This line added
 )
 from telegram import InlineQueryResultArticle, InputTextMessageContent
-
+from flask import Flask
 import uuid
 
 import json
@@ -569,4 +569,4 @@ def main():
     application.run_polling()
 
 if __name__ == "__main__":
-    main()
+    threading.Thread(target=run_flask, daemon=True).start()
