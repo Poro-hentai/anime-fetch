@@ -480,7 +480,7 @@ async def users(update: Update, context: ContextTypes.DEFAULT_TYPE):
     #Download json
 @admin_only
 async def download(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    files = [POSTS_FILE, USERS_FILE, REQUESTS_FILE]
+    files = [POSTS_FILE, USERS_FILE, REQUESTS_FILE]
     for file in files:
         if os.path.exists(file):
             await update.message.reply_document(document=open(file, "rb"), filename=file)
