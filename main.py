@@ -477,6 +477,15 @@ async def users(update: Update, context: ContextTypes.DEFAULT_TYPE):
     users = load_data(USERS_FILE)
     count = len(users)
     await update.message.reply_text(f"Total unique users who started the bot: {count}")
+    #Download json
+@admin_only
+async def download(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    files = [POSTS_FILE, USERS_FILE, REQUESTS_FILE]
+    for file in files:
+        if os.path.exists(file):
+            await update.message.reply_document(document=open(file, "rb"), filename=file)
+        else:
+            await update.message.reply_text(f"❌ File `{file}` not found.", parse_mode="Markdown")
 
 # Admin-only command: broadcast message to all users
 @admin_only
@@ -552,6 +561,7 @@ def main():
     application.add_handler(CommandHandler("deletepost", deletepost))
     application.add_handler(CommandHandler("users", users))
     application.add_handler(CommandHandler("msguser", msguser))
+    application.add_handler(CommandHandler("download", download))
     application.add_handler(CallbackQueryHandler(button_handler))
     application.add_handler(InlineQueryHandler(inlinequery))
 
