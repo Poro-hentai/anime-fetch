@@ -483,9 +483,10 @@ async def download(update: Update, context: ContextTypes.DEFAULT_TYPE):
     files = [POSTS_FILE, USERS_FILE, REQUESTS_FILE]
     for file in files:
         if os.path.exists(file):
-            await update.message.reply_document(document=open(file, "rb"), filename=file)
-        else:
-            await update.message.reply_text(f"❌ File `{file}` not found.", parse_mode="Markdown")
+            await update.message.reply_document(document=open(file, "rb"), filename=file)
+        else:
+            await update.message.reply_text(f"❌ File `{file}` not found.", parse_mode="Markdown")
+
 
 # Admin-only command: broadcast message to all users
 @admin_only
