@@ -566,17 +566,19 @@ def main():
     application.add_handler(CallbackQueryHandler(button_handler))
     application.add_handler(InlineQueryHandler(inlinequery))
 
-    # === Flask App for Render Uptime ===
+# === Flask App for Render Uptime ===
+from flask import Flask
+
 app = Flask(__name__)
 
 @app.route('/')
 def home():
-    return "✅ Bot is running!"
+    return "✅ Bot is running!"
 
 def run_flask():
-    app.run(host="0.0.0.0", port=8080)
+    app.run(host="0.0.0.0", port=8080)
 
 # === Main Entry Point ===
 if __name__ == "__main__":
-    threading.Thread(target=run_flask, daemon=True).start()
-    main()
+    threading.Thread(target=run_flask, daemon=True).start()
+    main()
