@@ -17,6 +17,7 @@ from telegram.ext import (
 from telegram import InlineQueryResultArticle, InputTextMessageContent
 from flask import Flask
 import uuid
+import threading
 
 import json
 import os
@@ -565,8 +566,15 @@ def main():
     application.add_handler(CallbackQueryHandler(button_handler))
     application.add_handler(InlineQueryHandler(inlinequery))
 
-    print("✅ Bot is running...")
-    application.run_polling()
+    app = Flask(__name__)
+
+@app.route('/')
+def home():
+    return "✅ Bot is running!"
+
+def run_flask():
+    app.run(host="0.0.0.0", port=8080)
 
 if __name__ == "__main__":
-    threading.Thread(target=run_flask, daemon=True).start()
+    threading.Thread(target=run_flask, daemon=True).start()
+    main()
