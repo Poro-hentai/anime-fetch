@@ -22,7 +22,7 @@ import json
 import os
 
 # Configuration
-API_TOKEN = "8006836827:AAERFD1tDpBDJhvKm_AHy20uSAzZdoRwbZc"  # Replace with your bot's API token
+API_TOKEN = ""  # Replace with your bot's API token
 POSTS_FILE = "posts.json"
 REQUESTS_FILE = "requests.json"
 USERS_FILE = "users.json"
