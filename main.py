@@ -532,23 +532,23 @@ async def broadcast_send(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
     await update.message.reply_text(f"✅ Broadcast complete.\nSent: {sent}\nFailed: {failed}")
     return ConversationHandler.END
+# === Flask for Render Uptime ===
+app = Flask(__name__)
 
-def main():
+@app.route('/')
+def home():
+    return "✅ Bot is running!"
     application = ApplicationBuilder().token(API_TOKEN).build()
 
     addpost_handler = ConversationHandler(
         entry_points=[CommandHandler("addpost", addpost)],
-        states={
-            WAITING_FOR_NAME: [MessageHandler(filters.TEXT & ~filters.COMMAND, save_post)],
-        },
+        states={WAITING_FOR_NAME: [MessageHandler(filters.TEXT & ~filters.COMMAND, save_post)]},
         fallbacks=[CommandHandler("cancel", cancel)],
     )
 
     broadcast_handler = ConversationHandler(
         entry_points=[CommandHandler("broadcast", broadcast_start)],
-        states={
-            WAITING_FOR_BROADCAST: [MessageHandler(filters.TEXT & ~filters.COMMAND, broadcast_send)],
-        },
+        states={WAITING_FOR_BROADCAST: [MessageHandler(filters.TEXT & ~filters.COMMAND, broadcast_send)]},
         fallbacks=[CommandHandler("cancel", cancel)],
     )
 
@@ -566,19 +566,9 @@ def main():
     application.add_handler(CallbackQueryHandler(button_handler))
     application.add_handler(InlineQueryHandler(inlinequery))
 
-# === Flask App for Render Uptime ===
-from flask import Flask
+    application.run_polling(drop_pending_updates=True)
 
-app = Flask(__name__)
-
-@app.route('/')
-def home():
-    return "✅ Bot is running!"
-
-def run_flask():
-    app.run(host="0.0.0.0", port=8080)
-
-# === Main Entry Point ===
 if __name__ == "__main__":
-    threading.Thread(target=run_flask, daemon=True).start()
+    import threading
+    threading.Thread(target=lambda: app.run(host="0.0.0.0", port=int(os.environ.get("PORT", 10000))), daemon=True).start()
     main()
