@@ -1,4 +1,5 @@
 python-telegram-bot==20.7
-pydub
-moviepy
-ffmpeg-python
+pydub==0.25.1
+moviepy==1.0.3
+ffmpeg-python==0.2.0
+
