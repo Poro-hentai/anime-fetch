@@ -1,0 +1,11 @@
+services:
+  - type: web
+    name: anime-fetch
+    env: python
+    plan: free
+    runtime: python
+    buildCommand: ""
+    startCommand: python main.py
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.11.9
