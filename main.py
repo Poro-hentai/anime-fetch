@@ -12,13 +12,12 @@ from telegram.ext import (
     ConversationHandler,
     InlineQueryHandler,
     filters,
-    ContextTypes   # ✅ This line added
+    ContextTypes
 )
 from telegram import InlineQueryResultArticle, InputTextMessageContent
 from flask import Flask
 import uuid
 import threading
-
 import json
 import os
 
@@ -270,10 +269,7 @@ async def animelist(update: Update, context: ContextTypes.DEFAULT_TYPE):
         disable_web_page_preview=True
     )
 
-
-
-# Search posts by name
-# Updated Search 
+# Updated Search
 async def search(update: Update, context: ContextTypes.DEFAULT_TYPE):
     query = " ".join(context.args).lower()
     if not query:
@@ -293,16 +289,14 @@ async def search(update: Update, context: ContextTypes.DEFAULT_TYPE):
     await update.message.reply_text(
         "Search results:\nClick a button to view the post.",
         reply_markup=InlineKeyboardMarkup(keyboard)
-        
     )
-
 
 # Request anime command: save multiple requests as a list, forward to group
 async def requestanime(update: Update, context: ContextTypes.DEFAULT_TYPE):
     request_text = " ".join(context.args).strip()
     if not request_text:
         await update.message.reply_text("Please specify the anime you want to request.")
-        return
+    return
 
     requests = load_data(REQUESTS_FILE)  # now a list
 
@@ -327,7 +321,6 @@ async def requestanime(update: Update, context: ContextTypes.DEFAULT_TYPE):
     except Exception as e:
         print(f"Failed to send request to group: {e}")
 
-        
 #send msg to user
 @admin_only
 async def msguser(update: Update, context: ContextTypes.DEFAULT_TYPE):
@@ -383,7 +376,6 @@ async def deletepost(update: Update, context: ContextTypes.DEFAULT_TYPE):
     del posts[post_name]
     save_data(POSTS_FILE, posts)
     await update.message.reply_text(f"✅ Post '{post_name}' has been deleted.")
-
 
 # View all anime requests
 @admin_only
@@ -465,8 +457,6 @@ async def button_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
         elif media["type"] == "document":
             await query.message.chat.send_document(media["file_id"], caption=caption, reply_markup=buttons)
 
-
-
 # Cancel the conversation
 async def cancel(update: Update, context: ContextTypes.DEFAULT_TYPE):
     await update.message.reply_text("Operation canceled.")
@@ -478,7 +468,8 @@ async def users(update: Update, context: ContextTypes.DEFAULT_TYPE):
     users = load_data(USERS_FILE)
     count = len(users)
     await update.message.reply_text(f"Total unique users who started the bot: {count}")
-    #Download json
+    
+#Download json
 @admin_only
 async def download(update: Update, context: ContextTypes.DEFAULT_TYPE):
     files = [POSTS_FILE, USERS_FILE, REQUESTS_FILE]
@@ -487,7 +478,6 @@ async def download(update: Update, context: ContextTypes.DEFAULT_TYPE):
             await update.message.reply_document(document=open(file, "rb"), filename=file)
         else:
             await update.message.reply_text(f"❌ File `{file}` not found.", parse_mode="Markdown")
-
 
 # Admin-only command: broadcast message to all users
 @admin_only
@@ -500,7 +490,6 @@ async def broadcast_send(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
     message = update.message.reply_to_message or update.message
     reply_markup = message.reply_markup if message.reply_markup else None
-
 
     sent, failed = 0, 0
 
@@ -518,7 +507,7 @@ async def broadcast_send(update: Update, context: ContextTypes.DEFAULT_TYPE):
                     chat_id=int(user_id),
                     document=message.document.file_id,
                     caption=message.caption or "",
-                   reply_markup=reply_markup
+                    reply_markup=reply_markup
                 )
             else:
                 await context.bot.send_message(
@@ -532,8 +521,8 @@ async def broadcast_send(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
     await update.message.reply_text(f"✅ Broadcast complete.\nSent: {sent}\nFailed: {failed}")
     return ConversationHandler.END
+
 # === Flask for Render Uptime ===
-from flask import Flask
 app = Flask(__name__)
 
 @app.route('/')
@@ -575,5 +564,7 @@ def main():
 # === Run Flask & Bot Together ===
 if __name__ == "__main__":
     import threading
-    threading.Thread(target=lambda: app.run(host="0.0.0.0", port=int(os.environ.get("PORT", 10000))), daemon=True).start()
+    # It's good practice to get the port from environment variables in Render
+    port = int(os.environ.get("PORT", 10000))
+    threading.Thread(target=lambda: app.run(host="0.0.0.0", port=port), daemon=True).start()
     main()
