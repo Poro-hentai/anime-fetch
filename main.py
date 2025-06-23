@@ -533,11 +533,15 @@ async def broadcast_send(update: Update, context: ContextTypes.DEFAULT_TYPE):
     await update.message.reply_text(f"✅ Broadcast complete.\nSent: {sent}\nFailed: {failed}")
     return ConversationHandler.END
 # === Flask for Render Uptime ===
+from flask import Flask
 app = Flask(__name__)
 
 @app.route('/')
 def home():
     return "✅ Bot is running!"
+
+# === Main Bot Function ===
+def main():
     application = ApplicationBuilder().token(API_TOKEN).build()
 
     addpost_handler = ConversationHandler(
@@ -568,6 +572,7 @@ def home():
 
     application.run_polling(drop_pending_updates=True)
 
+# === Run Flask & Bot Together ===
 if __name__ == "__main__":
     import threading
     threading.Thread(target=lambda: app.run(host="0.0.0.0", port=int(os.environ.get("PORT", 10000))), daemon=True).start()
