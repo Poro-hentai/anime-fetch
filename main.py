@@ -503,7 +503,7 @@ elif query.data.startswith("viewpost:"):
     posts = load_data(POSTS_FILE)
     post = posts.get(post_name)
     if not post:
-        await query.edit_message_text(ᴘᴏsᴛ ɴᴏᴛ ғᴏᴜɴᴅ!")
+        await query.edit_message_text("ᴘᴏsᴛ ɴᴏᴛ ғᴏᴜɴᴅ!")
         return
 
     media = post["media"]
