@@ -498,29 +498,28 @@ async def button_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
     elif query.data == "close":
         await query.delete_message()
-elif query.data.startswith("viewpost:"):
-    post_name = query.data.split(":", 1)[1]
-    posts = load_data(POSTS_FILE)
-    post = posts.get(post_name)
-    if not post:
-        await query.edit_message_text("ᴘᴏsᴛ ɴᴏᴛ ғᴏᴜɴᴅ!")
-        return
+    elif query.data.startswith("viewpost:"):
+        post_name = query.data.split(":", 1)[1]
+        posts = load_data(POSTS_FILE)
+        post = posts.get(post_name)
+        if not post:
+            await query.edit_message_text("❌ ᴘᴏsᴛ ɴᴏᴛ ғᴏᴜɴᴅ!")
+            return
 
-    media = post["media"]
-    caption = post.get("caption", "")
-    buttons = build_keyboard(post.get("buttons"))
+        media = post["media"]
+        caption = post.get("caption", "")
+        buttons = build_keyboard(post.get("buttons"))
 
-    # Delete search result message
-    try:
-        await query.message.delete()
-    except Exception as e:
-        print(f"❗ ғᴀɪʟᴇᴅ ᴛᴏ ᴅᴇʟᴇᴛᴇ ᴍᴇssᴀɢᴇ: {e}")
+        try:
+            await query.message.delete()
+        except Exception as e:
+            print(f"❗ ғᴀɪʟᴇᴅ ᴛᴏ ᴅᴇʟᴇᴛᴇ ᴍᴇssᴀɢᴇ: {e}")
 
-    # Send new message
-    if media["type"] == "photo":
-        await query.message.chat.send_photo(media["file_id"], caption=caption, reply_markup=buttons)
-    elif media["type"] == "document":
-        await query.message.chat.send_document(media["file_id"], caption=caption, reply_markup=buttons)
+        if media["type"] == "photo":
+            await query.message.chat.send_photo(media["file_id"], caption=caption, reply_markup=buttons)
+        elif media["type"] == "document":
+            await query.message.chat.send_document(media["file_id"], caption=caption, reply_markup=buttons)
+
 
 
 # Cancel the conversation
@@ -583,7 +582,7 @@ async def broadcast_send(update: Update, context: ContextTypes.DEFAULT_TYPE):
                 )
             sent += 1
         except Exception as e:
-    failed += 1
+        failed += 1
     print(f"❌ғᴀɪʟᴇᴅ ᴛᴏ sᴇɴᴅ ᴛᴏ {user_id}: {e}")
 
     await update.message.reply_text(f"✅ ʙʀᴏᴀᴅᴄᴀsᴛ ᴄᴏᴍᴘʟᴇᴛᴇ.\n sᴇɴᴛ: {sent}\n ғᴀɪʟᴇᴅ: {failed}")
