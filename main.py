@@ -22,8 +22,7 @@ import json
 import os
 
 # Configuration
-API_TOKEN = os.environ.get("8006836827:AAFQl8eVBBfI07CuHWh_oqxbFX5rYUyB-XE")
- # Replace with your bot's API token
+API_TOKEN = os.environ.get("API_TOKEN")
 POSTS_FILE = "posts.json"
 REQUESTS_FILE = "requests.json"
 USERS_FILE = "users.json"
