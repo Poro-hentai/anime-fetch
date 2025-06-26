@@ -149,7 +149,7 @@ def admin_only(func):
         admin_ids = [5759232282]  # Put your Telegram user ID(s) here (int)
         user_id = update.effective_user.id
         if user_id not in admin_ids:
-            await update.message.reply_text("You are not authorized to use this command.")
+            await update.message.reply_text("ʙᴀᴋᴀ ! ʏᴏᴜ ᴀʀᴇ ɴᴏᴛ ᴍʏ sᴇɴᴘᴀɪ. ")
             return ConversationHandler.END
         return await func(update, context)
     return wrapper
@@ -371,6 +371,13 @@ async def msguser(update: Update, context: ContextTypes.DEFAULT_TYPE):
     except Exception as e:
         await update.message.reply_text(f"❌ Failed to send message: {e}")
 
+#unknown command replyer
+async def unknown_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    await update.message.reply_text(
+        "❓ Unknown command! Use /start to see available commands."
+    )
+
+
 #deletepost
 @admin_only
 async def deletepost(update: Update, context: ContextTypes.DEFAULT_TYPE):
@@ -571,7 +578,8 @@ def main():
     application.add_handler(CallbackQueryHandler(button_handler))
     application.add_handler(InlineQueryHandler(inlinequery))
 
-    application.run_polling(drop_pending_updates=True)
+ application.add_handler(MessageHandler(filters.COMMAND, unknown_command))
+   application.run_polling(drop_pending_updates=True)
 
 # === Run Flask & Bot Together ===
 if __name__ == "__main__":
