@@ -16,6 +16,7 @@ from telegram.ext import (
 )
 from telegram import InlineQueryResultArticle, InputTextMessageContent
 from flask import Flask
+import difflib
 import uuid
 import threading
 import json
@@ -269,27 +270,38 @@ async def animelist(update: Update, context: ContextTypes.DEFAULT_TYPE):
         disable_web_page_preview=True
     )
 
-# Updated Search
+# Updated Search: Fuzzy matching and partial
 async def search(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    query = " ".join(context.args).lower()
+    query = " ".join(context.args).strip().lower()
     if not query:
-        await update.message.reply_text("Please provide a search term.")
+        await update.message.reply_text("❗ Please provide a search term.")
         return
 
     posts = load_data(POSTS_FILE)
-    results = [name for name in posts if query in name.lower()]
+    post_names = list(posts.keys())
 
-    if not results:
-        await update.message.reply_text("No matches found!")
+    # Get close matches using difflib
+    close_matches = difflib.get_close_matches(query, post_names, n=10, cutoff=0.4)
+
+    # Also include substring matches
+    substring_matches = [name for name in post_names if query in name.lower()]
+
+    # Combine and remove duplicates
+    all_matches = list(dict.fromkeys(close_matches + substring_matches))
+
+    if not all_matches:
+        await update.message.reply_text("❌ No matching anime found!")
         return
 
     keyboard = [
-        [InlineKeyboardButton(name, callback_data=f"viewpost:{name}")] for name in results
+        [InlineKeyboardButton(name, callback_data=f"viewpost:{name}")] for name in all_matches
     ]
     await update.message.reply_text(
-        "Search results:\nClick a button to view the post.",
-        reply_markup=InlineKeyboardMarkup(keyboard)
+        f"🔎 Search results for: `{query}`",
+        reply_markup=InlineKeyboardMarkup(keyboard),
+        parse_mode="Markdown"
     )
+
 
 # Request anime command: save multiple requests as a list, forward to group
 async def requestanime(update: Update, context: ContextTypes.DEFAULT_TYPE):
