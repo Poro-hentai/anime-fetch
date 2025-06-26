@@ -16,11 +16,13 @@ from telegram.ext import (
 )
 from telegram import InlineQueryResultArticle, InputTextMessageContent
 from flask import Flask
+import logging
 import difflib
 import uuid
 import threading
 import json
 import os
+logging.basicConfig(level=logging.INFO)
 
 # Configuration
 API_TOKEN = os.environ.get("API_TOKEN")
@@ -42,40 +44,37 @@ HELP_URL = "https://telegra.ph/file/e6ec31fc792d072da2b7e-54e7c7d4c5651823b3.jpg
 START_CAPTION = (
     "🌸 *ᴡᴇʟᴄᴏᴍᴇ ᴛᴏ ᴀɴɪᴍᴇ ɢᴀʀᴅᴇɴ!* 🌸\n\n"
     "🌀 ᴛʜɪs ʙᴏᴛ ʜᴇʟᴘs ʏᴏᴜ ᴛᴏ ᴅᴏᴡɴʟᴏᴀᴅ ᴀɴɪᴍᴇ & ʀᴇǫᴜᴇsᴛ ʏᴏᴜʀ ғᴀᴠᴏʀɪᴛᴇ ᴀɴɪᴍᴇ!\n\n"
-    "📂 *ғᴇᴀᴛᴜʀᴇs:*\n"
-    "• sᴇᴀʀᴄʜ ғʀᴏᴍ sᴀᴠᴇᴅ ᴀɴɪᴍᴇ ᴘᴏsᴛs\n"
-    "• ʀᴇǫᴜᴇsᴛ ɴᴇᴡ ᴀɴɪᴍᴇ (ᴀᴅᴍɪɴ ɴᴏᴛɪғɪᴇᴅ)\n"
+    "━━━━━━━━━━━━━━━━━━━━━━━━━━\n\n"
     "📢 *ᴡᴏʀᴋɪɴɢ ғᴏʀ:*\n"
-    "🔗 @LORD_SHADOW_SAMA – ʏᴏᴜʀ ᴅᴀɪʟʏ ᴀɴɪᴍᴇ ᴅᴏsᴇ!\n\n"
+    "🔗 @LORD_SHADOW_SAMA\n\n"
+    "━━━━━━━━━━━━━━━━━━━━━━━━━━\n\n"
     "🔽 *ᴜsᴇ ᴛʜᴇ ʙᴜᴛᴛᴏɴs ʙᴇʟᴏᴡ:*\n"
     "• ⚙️ ᴄʟɪᴄᴋ *ʜᴇʟᴘ* ᴛᴏ sᴇᴇ ᴀʟʟ ᴄᴏᴍᴍᴀɴᴅs\n"
     "• 📜 ᴄʟɪᴄᴋ *ᴀʙᴏᴜᴛ* ᴛᴏ ᴄʜᴇᴄᴋ ᴏᴜʀ ᴍɪssɪᴏɴ & ᴄʜᴀɴɴᴇʟ ʟɪɴᴋs\n"
     "• ❌ ᴄʟɪᴄᴋ *ᴄʟᴏsᴇ* ᴛᴏ ᴅᴇʟᴇᴛᴇ ᴛʜɪs ᴍᴇssᴀɢᴇ\n\n"
-    "_ᴇɴᴊᴏʏ ʏᴏᴜʀ ᴀɴɪᴍᴇ ᴊᴏᴜʀɴᴇʏ ᴡɪᴛʜ ᴜs!_ ✨"
 )
 
 ABOUT_CAPTION = (
     "📜 *ᴀʙᴏᴜᴛ sᴇᴄᴛɪᴏɴ*\n\n"
     "🎥 ᴛʜɪs ʙᴏᴛ ɪs ᴍᴀᴅᴇ ғᴏʀ ʜᴇʟᴘɪɴɢ ᴜsᴇʀs ғɪɴᴅ & ʀᴇǫᴜᴇsᴛ ᴀɴɪᴍᴇ easilʏ.\n\n"
+    "━━━━━━━━━━━━━━━━━━━━━━━━━━\n\n"
     "📌 ᴏғғɪᴄɪᴀʟ ᴄʜᴀɴɴᴇʟs & ɢʀᴏᴜᴘs:\n"
-    "• 💬 <a href='https://t.me/sister_leveling'> ᴀɴɪᴍᴇ ɢʀᴏᴜᴘ</a>\n"
-    "• 🔗 <a href='https://t.me/Lord_Shadow_Sama'>ᴀɪᴍᴇ ᴄʜᴀɴɴᴇʟ</a>\n"
-    "• 🌟 <a href='https://t.me/Garden_Sama'>ɢᴀʀᴅᴇɴ</a>\n\n"
+    "• 💬 @sister_leveling - ᴀɴɪᴍᴇ ɢʀᴏᴜᴘ\n"
+    "• 🔗 @Lord_Shadow_Sama - ᴀɪᴍᴇ ᴄʜᴀɴɴᴇʟ\n"
+    "• 🌟 @Garden_Sama - ɢᴀʀᴅᴇɴ\n\n"
     "❓ɪғ ʏᴏᴜ ғᴀᴄᴇ ᴀɴʏ ɪssᴜᴇs, ғᴇᴇʟ ғʀᴇᴇ ᴛᴏ ᴀsᴋ ғᴏʀ ʜᴇʟᴘ ɪɴ ᴏᴜʀ ɢʀᴏᴜᴘ."
 )
 
 HELP_CAPTION = (
-    "⚙️ Help\n\n"
-    "Commands:\n"
-    "/addpost - Reply to a message containing anime media, caption & buttons to save it\n"
-    "/animelist - List all saved anime posts\n"
-    "/search <term> - Search anime posts by name\n"
-    "/requestanime <name> - Request an anime (your request will be sent to the group)\n"
-    "/viewrequests - View all user requests\n"
-    "/users - View how many users have started the bot (admin only)\n"
-    "/broadcast - Broadcast a message to all users (admin only)\n"
-    "/cancel - Cancel any ongoing action\n\n"
-    "Buttons in saved posts will be preserved and shown when displaying posts.\n\n\n"
+    "⚙️ ʜᴇʟᴘ\n\n"
+    "ᴄᴏᴍᴍᴀᴅs:\n"
+    "/start - sᴛᴀʀᴛ ᴍᴇssᴀɢᴇ ᴏʀ sᴇᴇ ᴀʙᴏᴜᴛ/ʜᴇʟᴘ\n"
+    "/animelist - ʟɪsᴛ ᴀʟʟ sᴀᴠᴇᴅ ᴀɴɪᴍᴇ ᴘᴏsᴛs\n"
+    "/search <term> - sᴇᴀʀᴄʜ ᴀɴɪᴍᴇ ᴘᴏsᴛs ʙʏ ɴᴀᴍᴇ\n"
+    "/requestanime <ᴀɴɪᴍᴇ ɴᴀᴍᴇ> - ʀᴇǫᴜᴇsᴛ ᴀɴ ᴀɴɪᴍᴇ (ʏᴏᴜʀ ʀᴇǫᴜᴇsᴛ ᴡɪʟʟ ʙᴇ sᴇɴᴛ ᴛᴏ ᴛʜᴇ ɢʀᴏᴜᴘ)\n"
+    "/viewrequests - ᴠɪᴇᴡ ʏᴏᴜʀ ʀᴇǫᴜᴇsᴛs\n"
+    "/cancel - ᴄᴀɴᴄᴇʟ ᴀɴʏ ᴏɴɢᴏɪɴɢ ᴀᴄᴛɪᴏɴ\n"
+    "━━━━━━━━━━━━━━━━━━━━━━━━━━\n\n"
     "ғᴏʀ ᴍᴏʀᴇ ʜᴇʟᴘ ᴊᴏɪɴ:- @Sister_leveling ᴀɴᴅ ᴛᴇʟʟ ᴀᴅᴍɪɴ"
 )
 
@@ -118,30 +117,36 @@ async def inlinequery(update: Update, context: ContextTypes.DEFAULT_TYPE):
         return
 
     posts = load_data(POSTS_FILE)
+    post_names = list(posts.keys())
 
-    for name, post in posts.items():
-        if query in name.lower():
-            caption = post.get("caption", "No caption")
-            results.append(
-                InlineQueryResultArticle(
-                    id=str(uuid.uuid4()),
-                    title=name,
-                    description=caption[:50] + "...",
-                    input_message_content=InputTextMessageContent(f"*{name}*\n\n{caption}", parse_mode="Markdown")
-                )
+    matches = difflib.get_close_matches(query, post_names, n=10, cutoff=0.4)
+    matches += [name for name in post_names if query in name.lower()]
+    matches = list(dict.fromkeys(matches))  # Remove duplicates
+
+    for name in matches:
+        post = posts[name]
+        caption = post.get("caption", "No caption")
+        results.append(
+            InlineQueryResultArticle(
+                id=str(uuid.uuid4()),
+                title=name,
+                description=caption[:50] + "...",
+                input_message_content=InputTextMessageContent(f"*{name}*\n\n{caption}", parse_mode="Markdown")
             )
+        )
 
     await update.inline_query.answer(results[:20])  # Limit to 20 results
+
 
 # Start command handler
 async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
     await save_user(update)
     keyboard = [
         [
-            InlineKeyboardButton("About 📜", callback_data="about"),
-            InlineKeyboardButton("Help ⚙️", callback_data="help"),
+            InlineKeyboardButton("ᴀʙᴏᴜᴛ 📜", callback_data="about"),
+            InlineKeyboardButton("ʜᴇʟᴘ ⚙️", callback_data="help"),
         ],
-        [InlineKeyboardButton("❌ Close", callback_data="close")],
+        [InlineKeyboardButton("𝙲ʟᴏsᴇ", callback_data="close")],
     ]
     await update.message.reply_photo(
         photo=START_URL,
@@ -152,13 +157,21 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
 # Admin-only decorator
 def admin_only(func):
     async def wrapper(update: Update, context: ContextTypes.DEFAULT_TYPE):
-        admin_ids = [5759232282]  # Put your Telegram user ID(s) here (int)
+        admin_ids = [5759232282]  # List of allowed admin IDs
         user_id = update.effective_user.id
+
         if user_id not in admin_ids:
-            await update.message.reply_text("ʙᴀᴋᴀ ! ʏᴏᴜ ᴀʀᴇ ɴᴏᴛ ᴍʏ sᴇɴᴘᴀɪ. ")
+            # If it's a command
+            if hasattr(update, "message") and update.message:
+                await update.message.reply_text("ʙᴀᴋᴀ! ʏᴏᴜ ᴀʀᴇ ɴᴏᴛ ᴍʏ sᴇɴᴘᴀɪ.")
+            # If it's a button press
+            elif hasattr(update, "callback_query") and update.callback_query:
+                await update.callback_query.answer("ʙᴀᴋᴀ! ʏᴏᴜ ᴀʀᴇ ɴᴏᴛ ᴍʏ sᴇɴᴘᴀɪ.", show_alert=True)
+
             return ConversationHandler.END
         return await func(update, context)
     return wrapper
+
 
 # Helper: parse inline keyboard buttons from the message (if any)
 def extract_buttons(message):
@@ -313,7 +326,7 @@ async def search(update: Update, context: ContextTypes.DEFAULT_TYPE):
 async def requestanime(update: Update, context: ContextTypes.DEFAULT_TYPE):
     request_text = " ".join(context.args).strip()
     if not request_text:
-        await update.message.reply_text("ᴘʟᴇᴀsᴇ sᴘᴇᴄɪғʏ ᴛʜᴇ ᴀɴɪᴍᴇ ʏᴏᴜ ᴡᴀɴᴛ ᴛᴏ requesᴛ.")
+        await update.message.reply_text("ᴘʟᴇᴀsᴇ sᴘᴇᴄɪғʏ ᴛʜᴇ ᴀɴɪᴍᴇ ʏᴏᴜ ᴡᴀɴᴛ ᴛᴏ requesᴛ.\n ʙʏ ᴡʀɪᴛɪɴɢ ʟɪᴋᴇ ᴛʜɪs - \n /requestanime ɴᴀᴛᴜᴛᴏ")
         return
 
     requests = load_data(REQUESTS_FILE)  # now a list
@@ -329,22 +342,22 @@ async def requestanime(update: Update, context: ContextTypes.DEFAULT_TYPE):
     })
     save_data(REQUESTS_FILE, requests)
 
-    await update.message.reply_text(f"✅ Your request for '{request_text}' has been recorded!")
+    await update.message.reply_text(f"✅ʏᴏᴜʀ ʀᴇǫᴜᴇsᴛ ғᴏʀ '{request_text}' ʜᴀᴅ ʙᴇᴇɴ ʀᴇᴄᴏʀᴅᴇᴅ!")
 
     try:
         await context.bot.send_message(
             chat_id=GROUP_CHAT,
-            text=f"📢 New Anime Request from @{user_name}:\n{request_text}"
+            text=f"📢 ɴᴇᴡ ᴀɴɪᴍᴇ ʀᴇǫᴜᴇsᴛ ғʀᴏᴍ - \n@{user_name}:-{request_text}"
         )
     except Exception as e:
-        print(f"Failed to send request to group: {e}")
+        print(f"ғᴀɪʟᴇᴅ ᴛᴏ sᴇɴᴅ ʀᴇǫᴜᴇsᴛ ᴛᴏ ɢʀᴏᴜᴘ: {e}")
 
 #send msg to user
 @admin_only
 async def msguser(update: Update, context: ContextTypes.DEFAULT_TYPE):
     args = context.args
     if len(args) < 2:
-        await update.message.reply_text("Usage: /msguser <user_id or @username> <your message>")
+        await update.message.reply_text("ᴜsᴇ ʟɪᴋᴇ ᴛʜɪs:- /msguser <user_id ᴏʀ ᴡʀɪᴛᴇ @username> <ʏᴏᴜʀ ᴍᴇssᴀɢᴇ>")
         return
 
     user_ref = args[0]
@@ -361,50 +374,50 @@ async def msguser(update: Update, context: ContextTypes.DEFAULT_TYPE):
                 found_id = uid
                 break
         if not found_id:
-            await update.message.reply_text(f"❌ Username '{user_ref}' not found in user database.")
+            await update.message.reply_text(f"❌ ᴜsᴇʀɴᴀᴍᴇ '{user_ref}' ɴᴏᴛ ғᴏᴜɴᴅ ɪɴ ᴜsᴇʀ ᴅᴀᴛᴀʙᴀsᴇ.")
             return
         user_id = int(found_id)
     else:
         try:
             user_id = int(user_ref)
         except ValueError:
-            await update.message.reply_text("❌ Invalid user ID or username.")
+            await update.message.reply_text("❌ ɪɴᴠᴀʟɪᴅ ᴜsᴇʀ ID ᴏʀ usernamᴇ.")
             return
 
     try:
         await context.bot.send_message(chat_id=user_id, text=msg_text)
-        await update.message.reply_text(f"✅ Message sent to `{user_id}`", parse_mode="Markdown")
+        await update.message.reply_text(f"✅ ᴍᴇssᴀɢᴇ sᴇɴᴛ ᴛᴏ `{user_id}`", parse_mode="Markdown")
     except Exception as e:
-        await update.message.reply_text(f"❌ Failed to send message: {e}")
+        await update.message.reply_text(f"❌ ғᴀɪʟᴇᴅ ᴛᴏ sᴇɴᴅ ᴍᴇssᴀɢᴇ: {e}")
 
 #unknown command replyer
 async def unknown_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    await update.message.reply_text("❓ Unknown command! Use /start to see available commands.")
+    await update.message.reply_text("ʙᴀᴋᴀ! ᴜɴᴋɴᴏᴡɴ ᴄᴏᴍᴍᴀɴᴅ: ᴜsᴇ /start ᴛᴏ sᴇᴇ ᴀᴠᴀɪʟᴀʙʟᴇ commanᴅs.")
     
 #deletepost
 @admin_only
 async def deletepost(update: Update, context: ContextTypes.DEFAULT_TYPE):
     if not context.args:
-        await update.message.reply_text("Usage: /deletepost <post name>")
+        await update.message.reply_text("ᴜsᴇ ʟɪᴋᴇ ᴛʜɪs: /deletepost <ᴘᴏsᴛ ɴᴀᴍᴇ>")
         return
 
     post_name = " ".join(context.args).strip()
     posts = load_data(POSTS_FILE)
 
     if post_name not in posts:
-        await update.message.reply_text(f"No post found with name '{post_name}'.")
+        await update.message.reply_text(f"ɴᴏ ᴘᴏsᴛ ғᴏᴜɴᴅ ᴡɪᴛʜ ɴᴀᴍᴇ '{post_name}'.")
         return
 
     del posts[post_name]
     save_data(POSTS_FILE, posts)
-    await update.message.reply_text(f"✅ Post '{post_name}' has been deleted.")
+    await update.message.reply_text(f"✅ ᴘᴏsᴛ '{post_name}' ʜᴀs ʙᴇᴇɴ ᴅᴇʟᴇᴛᴇᴅ.")
 
 # Admin-only command to remove a request (exact match, case-insensitive)
 @admin_only
 async def removereq(update: Update, context: ContextTypes.DEFAULT_TYPE):
     args = context.args
     if not args:
-        await update.message.reply_text("Usage: /removereq <anime name>")
+        await update.message.reply_text("ᴜsᴇ ʟɪᴋᴇ ᴛʜɪs: /removereq <ᴀɴɪᴍᴇ ɴᴀᴍᴇ>")
         return
 
     anime_name = " ".join(args).strip().lower()
@@ -418,9 +431,15 @@ async def removereq(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
     removed_count = original_count - len(updated_requests)
     if removed_count > 0:
-        await update.message.reply_text(f"✅ Removed {removed_count} request(s) for '{anime_name}'.")
+        await update.message.reply_text(f"✅ ʀᴇᴍᴏᴠᴇᴅ {removed_count} ʀᴇǫᴜᴇsᴛ(s) ғᴏʀ '{anime_name}'.")
     else:
-        await update.message.reply_text(f"❌ No exact match found for '{anime_name}'.")
+        await update.message.reply_text(f"❌ ɴᴏ ᴇxᴀᴄᴛ ᴍᴀᴛᴄʜ ғᴏᴜɴᴅ ғᴏʀ '{anime_name}'.")
+
+async def send_restart_notice(application):
+    try:
+        await application.bot.send_message(chat_id="@sister_leveling", text="♻️ ʙᴏᴛ ʀᴇsᴛᴀʀᴛᴇᴅ ʙʏ @LORD_SHADOW_SAMA")
+    except Exception as e:
+        print(f"❌ ғᴀɪʟᴇᴅ ᴛᴏ sᴇɴᴅ ʀᴇsᴛᴀʀᴛ ᴍᴇssᴀɢᴇ: {e}")
 
 
 # View all anime requests
@@ -428,10 +447,10 @@ async def removereq(update: Update, context: ContextTypes.DEFAULT_TYPE):
 async def viewrequests(update: Update, context: ContextTypes.DEFAULT_TYPE):
     requests = load_data(REQUESTS_FILE)
     if not requests:
-        await update.message.reply_text("No requests found!")
+        await update.message.reply_text("ɴᴏ ʀᴇǫᴜᴇsᴛs ғᴏᴜɴᴅ!")
         return
 
-    response = "Anime Requests:\n\n"
+    response = "ᴀɴɪᴍᴇ ʀᴇǫᴜᴇsᴛs:\n\n"
     for req in requests:
         user_display = f"@{req['username']}" if req['username'] else "Unknown"
         response += f"{user_display}: {req['anime']}\n"
@@ -442,12 +461,12 @@ async def button_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
     query = update.callback_query
     await query.answer()
 
-    close_button = [InlineKeyboardButton("❌ Close", callback_data="close")]
+    close_button = [InlineKeyboardButton("❌ ᴄʟᴏsᴇ", callback_data="close")]
 
     if query.data == "about":
         keyboard = [
-            [InlineKeyboardButton("Back 🔙", callback_data="back"),
-             InlineKeyboardButton("Help ⚙️", callback_data="help")],
+            [InlineKeyboardButton("ʙᴀᴄᴋ 🔙", callback_data="back"),
+             InlineKeyboardButton("ʜᴇʟᴘ ⚙️", callback_data="help")],
             close_button
         ]
         await query.edit_message_media(
@@ -457,8 +476,8 @@ async def button_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
     elif query.data == "help":
         keyboard = [
-            [InlineKeyboardButton("Back 🔙", callback_data="back"),
-             InlineKeyboardButton("About 📜", callback_data="about")],
+            [InlineKeyboardButton("ʙᴀᴄᴋ 🔙", callback_data="back"),
+             InlineKeyboardButton("ᴀʙᴏᴜᴛ 📜", callback_data="about")],
             close_button
         ]
         await query.edit_message_media(
@@ -468,8 +487,8 @@ async def button_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
     elif query.data == "back":
         keyboard = [
-            [InlineKeyboardButton("About 📜", callback_data="about"),
-             InlineKeyboardButton("Help ⚙️", callback_data="help")],
+            [InlineKeyboardButton("ᴀʙᴏᴜᴛ 📜", callback_data="about"),
+             InlineKeyboardButton("ʜᴇʟᴘ ⚙️", callback_data="help")],
             close_button
         ]
         await query.edit_message_media(
@@ -479,33 +498,34 @@ async def button_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
     elif query.data == "close":
         await query.delete_message()
-    elif query.data.startswith("viewpost:"):
-        post_name = query.data.split(":", 1)[1]
-        posts = load_data(POSTS_FILE)
-        post = posts.get(post_name)
-        if not post:
-            await query.edit_message_text("Post not found!")
-            return
+elif query.data.startswith("viewpost:"):
+    post_name = query.data.split(":", 1)[1]
+    posts = load_data(POSTS_FILE)
+    post = posts.get(post_name)
+    if not post:
+        await query.edit_message_text(ᴘᴏsᴛ ɴᴏᴛ ғᴏᴜɴᴅ!")
+        return
 
-        media = post["media"]
-        caption = post.get("caption", "")
-        buttons = build_keyboard(post.get("buttons"))
+    media = post["media"]
+    caption = post.get("caption", "")
+    buttons = build_keyboard(post.get("buttons"))
 
-        # Delete the message with button (search result)
-        try:
-            await query.message.delete()
-        except:
-            pass  # Ignore if delete fails
+    # Delete search result message
+    try:
+        await query.message.delete()
+    except Exception as e:
+        print(f"❗ ғᴀɪʟᴇᴅ ᴛᴏ ᴅᴇʟᴇᴛᴇ ᴍᴇssᴀɢᴇ: {e}")
 
-        # Send the post as new message
-        if media["type"] == "photo":
-            await query.message.chat.send_photo(media["file_id"], caption=caption, reply_markup=buttons)
-        elif media["type"] == "document":
-            await query.message.chat.send_document(media["file_id"], caption=caption, reply_markup=buttons)
+    # Send new message
+    if media["type"] == "photo":
+        await query.message.chat.send_photo(media["file_id"], caption=caption, reply_markup=buttons)
+    elif media["type"] == "document":
+        await query.message.chat.send_document(media["file_id"], caption=caption, reply_markup=buttons)
+
 
 # Cancel the conversation
 async def cancel(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    await update.message.reply_text("Operation canceled.")
+    await update.message.reply_text("ᴏᴘᴇʀᴀᴛɪᴏɴ canceleᴅ.")
     return ConversationHandler.END
 
 # Admin-only command: show how many users have started the bot
@@ -513,7 +533,7 @@ async def cancel(update: Update, context: ContextTypes.DEFAULT_TYPE):
 async def users(update: Update, context: ContextTypes.DEFAULT_TYPE):
     users = load_data(USERS_FILE)
     count = len(users)
-    await update.message.reply_text(f"Total unique users who started the bot: {count}")
+    await update.message.reply_text(f"ᴛᴏᴛᴀʟ ᴜɴɪǫᴜᴇ ᴜsᴇʀs ᴡʜᴏ sᴛᴀʀᴛᴇᴅ ᴛʜᴇ ʙᴏᴛ: {count}")
     
 #Download json
 @admin_only
@@ -523,12 +543,12 @@ async def download(update: Update, context: ContextTypes.DEFAULT_TYPE):
         if os.path.exists(file):
             await update.message.reply_document(document=open(file, "rb"), filename=file)
         else:
-            await update.message.reply_text(f"❌ File `{file}` not found.", parse_mode="Markdown")
+            await update.message.reply_text(f"❌ ғɪʟᴇ `{file}` ɴᴏᴛ ғᴏᴜɴᴅ.", parse_mode="Markdown")
 
 # Admin-only command: broadcast message to all users
 @admin_only
 async def broadcast_start(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    await update.message.reply_text("Please send me the message you want to broadcast to all users.")
+    await update.message.reply_text("ᴘʟᴇᴀsᴇ sᴇɴᴅ ᴍᴇ ᴛʜᴇ ᴍᴇssᴀɢʀ ʏᴏᴜ ᴡᴀɴᴛ ᴛᴏ ʙʀᴏᴀᴅᴄᴀsᴛ ᴛᴏ ᴀʟʟ ᴜsᴇʀs.")
     return WAITING_FOR_BROADCAST
 
 async def broadcast_send(update: Update, context: ContextTypes.DEFAULT_TYPE):
@@ -562,10 +582,11 @@ async def broadcast_send(update: Update, context: ContextTypes.DEFAULT_TYPE):
                     reply_markup=reply_markup
                 )
             sent += 1
-        except Exception:
-            failed += 1
+        except Exception as e:
+    failed += 1
+    print(f"❌ғᴀɪʟᴇᴅ ᴛᴏ sᴇɴᴅ ᴛᴏ {user_id}: {e}")
 
-    await update.message.reply_text(f"✅ Broadcast complete.\nSent: {sent}\nFailed: {failed}")
+    await update.message.reply_text(f"✅ ʙʀᴏᴀᴅᴄᴀsᴛ ᴄᴏᴍᴘʟᴇᴛᴇ.\n sᴇɴᴛ: {sent}\n ғᴀɪʟᴇᴅ: {failed}")
     return ConversationHandler.END
 
 # === Flask for Render Uptime ===
@@ -606,6 +627,7 @@ def main():
     application.add_handler(CallbackQueryHandler(button_handler))
     application.add_handler(InlineQueryHandler(inlinequery))
     application.add_handler(MessageHandler(filters.COMMAND, unknown_command))
+    application.post_init = send_restart_notice
     application.run_polling(drop_pending_updates=True)
 
 # === Run Flask & Bot Together ===
