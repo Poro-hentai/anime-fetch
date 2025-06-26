@@ -1,8 +1,7 @@
 services:
   - type: web
-    name: anime-fetch
+    name: fx-bot
     env: python
     buildCommand: pip install -r requirements.txt
     startCommand: python bot.py
-    runtime: python-3.10.12
-
+    runtime: python-3.12.11
