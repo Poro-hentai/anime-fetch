@@ -498,8 +498,8 @@ async def button_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
     elif query.data == "close":
         await query.delete_message()
-    elif query.data.startswith("viewpost:"):
-        post_name = query.data.split(":", 1)[1]
+    elif query.data.startswith("viewpost:"):
+        post_name = query.data.split(":", 1)[1]
         posts = load_data(POSTS_FILE)
         post = posts.get(post_name)
         if not post:
@@ -519,7 +519,6 @@ async def button_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
             await query.message.chat.send_photo(media["file_id"], caption=caption, reply_markup=buttons)
         elif media["type"] == "document":
             await query.message.chat.send_document(media["file_id"], caption=caption, reply_markup=buttons)
-
 
 
 # Cancel the conversation
