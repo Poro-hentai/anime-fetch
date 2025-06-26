@@ -262,7 +262,7 @@ def build_keyboard(buttons):
         keyboard.append(kb_row)
     return InlineKeyboardMarkup(keyboard)
 
-#show anime list
+# Show Anime List
 async def animelist(update: Update, context: ContextTypes.DEFAULT_TYPE):
     posts = load_data(POSTS_FILE)
     if not posts:
@@ -276,7 +276,8 @@ async def animelist(update: Update, context: ContextTypes.DEFAULT_TYPE):
         key = name[0].upper()
         grouped.setdefault(key, []).append(name)
 
-    text = "📚 ᴀɴɪᴍᴇ ʟɪʙʀᴀʀʏ* - sᴏʀᴛᴇᴅ ᴀ–ᴢ\n\n"
+    text = "*📚 ᴀɴɪᴍᴇ ʟɪʙʀᴀʀʏ - sᴏʀᴛᴇᴅ ᴀ–ᴢ*\n\n"
+
     for letter in sorted(grouped):
         text += f"🔠 *{letter}*\n"
         for title in grouped[letter]:
