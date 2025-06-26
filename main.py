@@ -578,8 +578,8 @@ def main():
     application.add_handler(CallbackQueryHandler(button_handler))
     application.add_handler(InlineQueryHandler(inlinequery))
 
- application.add_handler(MessageHandler(filters.COMMAND, unknown_command))
-   application.run_polling(drop_pending_updates=True)
+application.add_handler(MessageHandler(filters.COMMAND, unknown_command))
+ application.run_polling(drop_pending_updates=True)
 
 # === Run Flask & Bot Together ===
 if __name__ == "__main__":
