@@ -373,11 +373,8 @@ async def msguser(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
 #unknown command replyer
 async def unknown_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    await update.message.reply_text(
-        "❓ Unknown command! Use /start to see available commands."
-    )
-
-
+    await update.message.reply_text("❓ Unknown command! Use /start to see available commands.")
+    
 #deletepost
 @admin_only
 async def deletepost(update: Update, context: ContextTypes.DEFAULT_TYPE):
@@ -577,9 +574,8 @@ def main():
     application.add_handler(CommandHandler("download", download))
     application.add_handler(CallbackQueryHandler(button_handler))
     application.add_handler(InlineQueryHandler(inlinequery))
-
-application.add_handler(MessageHandler(filters.COMMAND, unknown_command))
- application.run_polling(drop_pending_updates=True)
+    application.add_handler(MessageHandler(filters.COMMAND, unknown_command))
+    application.run_polling(drop_pending_updates=True)
 
 # === Run Flask & Bot Together ===
 if __name__ == "__main__":
