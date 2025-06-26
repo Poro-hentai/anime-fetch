@@ -1,4 +1,2 @@
-python-telegram-bot==20.7
-pydub
-moviepy
-ffmpeg-python
+python-telegram-bot==20.8
+Flask
