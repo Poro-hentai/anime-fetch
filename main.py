@@ -500,11 +500,11 @@ async def button_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
         await query.delete_message()
     elif query.data.startswith("viewpost:"):
         post_name = query.data.split(":", 1)[1]
-        posts = load_data(POSTS_FILE)
-        post = posts.get(post_name)
-        if not post:
-            await query.edit_message_text("❌ ᴘᴏsᴛ ɴᴏᴛ ғᴏᴜɴᴅ!")
-            return
+        posts = load_data(POSTS_FILE)
+        post = posts.get(post_name)
+        if not post:
+            await query.edit_message_text("❌ ᴘᴏsᴛ ɴᴏᴛ ғᴏᴜɴᴅ!")
+            return
 
         media = post["media"]
         caption = post.get("caption", "")
