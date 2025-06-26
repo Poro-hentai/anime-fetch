@@ -578,8 +578,8 @@ async def broadcast_send(update: Update, context: ContextTypes.DEFAULT_TYPE):
                 )
             sent += 1
         except Exception as e:
-        failed += 1
-    print(f"❌ғᴀɪʟᴇᴅ ᴛᴏ sᴇɴᴅ ᴛᴏ {user_id}: {e}")
+            failed += 1
+            print(f"❌ғᴀɪʟᴇᴅ ᴛᴏ sᴇɴᴅ ᴛᴏ {user_id}: {e}")
 
     await update.message.reply_text(f"✅ ʙʀᴏᴀᴅᴄᴀsᴛ ᴄᴏᴍᴘʟᴇᴛᴇ.\n sᴇɴᴛ: {sent}\n ғᴀɪʟᴇᴅ: {failed}")
     return ConversationHandler.END
