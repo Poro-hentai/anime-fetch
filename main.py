@@ -40,23 +40,28 @@ ABOUT_URL = "https://telegra.ph/file/9d18345731db88fff4f8c-d2b3920631195c5747.jp
 HELP_URL = "https://telegra.ph/file/e6ec31fc792d072da2b7e-54e7c7d4c5651823b3.jpg"
 
 START_CAPTION = (
-    "✨ Welcome to Anime Garden! ✨\n\n"
-    "Discover & Request your favorite Anime.\n"
-    "Use the buttons below to explore more!\n\n"
-    "Commands:\n"
-    "/addpost - Admin only: Save an anime post with media, caption & buttons\n"
-    "/animelist - List saved anime posts\n"
-    "/search <name> - Search saved anime by name\n"
-    "/requestanime <name> - Request an anime (will be forwarded to group)\n"
-    "/viewrequests - View all anime requests\n"
-    "/users - View how many users have started the bot (admin only)\n"
-    "/broadcast - Broadcast a message to all users (admin only)\n"
-    "/cancel - Cancel current operation\n"
+    "🌸 *ᴡᴇʟᴄᴏᴍᴇ ᴛᴏ ᴀɴɪᴍᴇ ɢᴀʀᴅᴇɴ!* 🌸\n\n"
+    "🌀 ᴛʜɪs ʙᴏᴛ ʜᴇʟᴘs ʏᴏᴜ ᴛᴏ ᴅᴏᴡɴʟᴏᴀᴅ ᴀɴɪᴍᴇ & ʀᴇǫᴜᴇsᴛ ʏᴏᴜʀ ғᴀᴠᴏʀɪᴛᴇ ᴀɴɪᴍᴇ!\n\n"
+    "📂 *ғᴇᴀᴛᴜʀᴇs:*\n"
+    "• sᴇᴀʀᴄʜ ғʀᴏᴍ sᴀᴠᴇᴅ ᴀɴɪᴍᴇ ᴘᴏsᴛs\n"
+    "• ʀᴇǫᴜᴇsᴛ ɴᴇᴡ ᴀɴɪᴍᴇ (ᴀᴅᴍɪɴ ɴᴏᴛɪғɪᴇᴅ)\n"
+    "📢 *ᴡᴏʀᴋɪɴɢ ғᴏʀ:*\n"
+    "🔗 @LORD_SHADOW_SAMA – ʏᴏᴜʀ ᴅᴀɪʟʏ ᴀɴɪᴍᴇ ᴅᴏsᴇ!\n\n"
+    "🔽 *ᴜsᴇ ᴛʜᴇ ʙᴜᴛᴛᴏɴs ʙᴇʟᴏᴡ:*\n"
+    "• ⚙️ ᴄʟɪᴄᴋ *ʜᴇʟᴘ* ᴛᴏ sᴇᴇ ᴀʟʟ ᴄᴏᴍᴍᴀɴᴅs\n"
+    "• 📜 ᴄʟɪᴄᴋ *ᴀʙᴏᴜᴛ* ᴛᴏ ᴄʜᴇᴄᴋ ᴏᴜʀ ᴍɪssɪᴏɴ & ᴄʜᴀɴɴᴇʟ ʟɪɴᴋs\n"
+    "• ❌ ᴄʟɪᴄᴋ *ᴄʟᴏsᴇ* ᴛᴏ ᴅᴇʟᴇᴛᴇ ᴛʜɪs ᴍᴇssᴀɢᴇ\n\n"
+    "_ᴇɴᴊᴏʏ ʏᴏᴜʀ ᴀɴɪᴍᴇ ᴊᴏᴜʀɴᴇʏ ᴡɪᴛʜ ᴜs!_ ✨"
 )
 
 ABOUT_CAPTION = (
-    "📜 About Us\n\n"
-    "Anime Garden is your one-stop destination for discovering and requesting Anime!"
+    "📜 *ᴀʙᴏᴜᴛ sᴇᴄᴛɪᴏɴ*\n\n"
+    "🎥 ᴛʜɪs ʙᴏᴛ ɪs ᴍᴀᴅᴇ ғᴏʀ ʜᴇʟᴘɪɴɢ ᴜsᴇʀs ғɪɴᴅ & ʀᴇǫᴜᴇsᴛ ᴀɴɪᴍᴇ easilʏ.\n\n"
+    "📌 ᴏғғɪᴄɪᴀʟ ᴄʜᴀɴɴᴇʟs & ɢʀᴏᴜᴘs:\n"
+    "• 💬 <a href='https://t.me/sister_leveling'> ᴀɴɪᴍᴇ ɢʀᴏᴜᴘ</a>\n"
+    "• 🔗 <a href='https://t.me/Lord_Shadow_Sama'>ᴀɪᴍᴇ ᴄʜᴀɴɴᴇʟ</a>\n"
+    "• 🌟 <a href='https://t.me/Garden_Sama'>ɢᴀʀᴅᴇɴ</a>\n\n"
+    "❓ɪғ ʏᴏᴜ ғᴀᴄᴇ ᴀɴʏ ɪssᴜᴇs, ғᴇᴇʟ ғʀᴇᴇ ᴛᴏ ᴀsᴋ ғᴏʀ ʜᴇʟᴘ ɪɴ ᴏᴜʀ ɢʀᴏᴜᴘ."
 )
 
 HELP_CAPTION = (
@@ -70,7 +75,8 @@ HELP_CAPTION = (
     "/users - View how many users have started the bot (admin only)\n"
     "/broadcast - Broadcast a message to all users (admin only)\n"
     "/cancel - Cancel any ongoing action\n\n"
-    "Buttons in saved posts will be preserved and shown when displaying posts."
+    "Buttons in saved posts will be preserved and shown when displaying posts.\n\n\n"
+    "ғᴏʀ ᴍᴏʀᴇ ʜᴇʟᴘ ᴊᴏɪɴ:- @Sister_leveling ᴀɴᴅ ᴛᴇʟʟ ᴀᴅᴍɪɴ"
 )
 
 # States for ConversationHandler
@@ -175,7 +181,7 @@ def extract_buttons(message):
 @admin_only
 async def addpost(update: Update, context: ContextTypes.DEFAULT_TYPE):
     if not update.message.reply_to_message:
-        await update.message.reply_text("Please reply to a message containing the anime details to save.")
+        await update.message.reply_text("ᴘʟᴇᴀsᴇ ʀᴇᴘʟʏ ᴛᴏ ᴀ ᴍᴇssᴀɢᴇ ᴄᴏɴᴛᴀɪɴɪɴɢ ᴛʜᴇ ᴀɴɪᴍᴇ ᴅᴇᴛᴀɪʟs ᴛᴏ savᴇ.")
         return ConversationHandler.END
 
     reply_msg = update.message.reply_to_message
@@ -189,7 +195,7 @@ async def addpost(update: Update, context: ContextTypes.DEFAULT_TYPE):
         media_file_id = reply_msg.document.file_id
         media_type = "document"
     else:
-        await update.message.reply_text("No supported media found (photo/document).")
+        await update.message.reply_text("ɴᴏ sᴜᴘᴘᴏʀᴛᴇᴅ ᴍᴇᴅɪᴀ ғᴏᴜɴᴅ (ᴘʜᴏᴛᴏ/ᴅᴏᴄᴜᴍᴇɴᴛ).")
         return ConversationHandler.END
 
     caption = reply_msg.caption or ""
@@ -200,14 +206,14 @@ async def addpost(update: Update, context: ContextTypes.DEFAULT_TYPE):
     context.user_data["caption"] = caption
     context.user_data["buttons"] = buttons
 
-    await update.message.reply_text("What name should I save this post as? Reply with the name.")
+    await update.message.reply_text("ᴡʜᴀᴛ ɴᴀᴍᴇ sʜᴏᴜʟᴅ ɪ sᴀᴠᴇ ᴛʜɪs ᴘᴏsᴛ ᴀs? ʀᴇᴘʟʏ ᴡɪᴛʜ ᴛʜᴇ namᴇ.")
     return WAITING_FOR_NAME
 
 # Save post with media, caption, buttons
 async def save_post(update: Update, context: ContextTypes.DEFAULT_TYPE):
     post_name = update.message.text.strip()
     if not post_name:
-        await update.message.reply_text("Invalid name. Please try again.")
+        await update.message.reply_text("Invaliᴅ ɴᴀᴍᴇ. ᴘʟᴇᴀsᴇ ᴛʀʏ agaiɴ.")
         return WAITING_FOR_NAME
 
     media = context.user_data.get("media")
@@ -223,7 +229,7 @@ async def save_post(update: Update, context: ContextTypes.DEFAULT_TYPE):
     }
     save_data(POSTS_FILE, posts)
 
-    await update.message.reply_text(f"Post saved as '{post_name}'!")
+    await update.message.reply_text(f"Posᴛ sᴀᴠᴇᴅ ᴀs '{post_name}'!")
     return ConversationHandler.END
 
 # Helper to recreate InlineKeyboardMarkup from stored buttons
@@ -247,7 +253,7 @@ def build_keyboard(buttons):
 async def animelist(update: Update, context: ContextTypes.DEFAULT_TYPE):
     posts = load_data(POSTS_FILE)
     if not posts:
-        await update.message.reply_text("❌ No anime posts saved yet!")
+        await update.message.reply_text("❌ ɴᴏ ᴀɴɪᴍᴇ ᴘᴏsᴛs sᴀᴠᴇᴅ ʏᴇᴛ!")
         return
 
     sorted_posts = sorted(posts.keys(), key=lambda x: x.lower())
@@ -257,7 +263,7 @@ async def animelist(update: Update, context: ContextTypes.DEFAULT_TYPE):
         key = name[0].upper()
         grouped.setdefault(key, []).append(name)
 
-    text = "📚 *Anime Library* - Sorted A–Z\n\n"
+    text = "📚 ᴀɴɪᴍᴇ ʟɪʙʀᴀʀʏ* - sᴏʀᴛᴇᴅ ᴀ–ᴢ\n\n"
     for letter in sorted(grouped):
         text += f"🔠 *{letter}*\n"
         for title in grouped[letter]:
@@ -274,7 +280,7 @@ async def animelist(update: Update, context: ContextTypes.DEFAULT_TYPE):
 async def search(update: Update, context: ContextTypes.DEFAULT_TYPE):
     query = " ".join(context.args).strip().lower()
     if not query:
-        await update.message.reply_text("❗ Please provide a search term.")
+        await update.message.reply_text("❗ ᴘʟᴇᴀsᴇ ᴘʀᴏᴠɪᴅᴇ ᴀ sᴇᴀʀᴄʜ ᴛᴇʀᴍ.")
         return
 
     posts = load_data(POSTS_FILE)
@@ -290,7 +296,7 @@ async def search(update: Update, context: ContextTypes.DEFAULT_TYPE):
     all_matches = list(dict.fromkeys(close_matches + substring_matches))
 
     if not all_matches:
-        await update.message.reply_text("❌ No matching anime found!")
+        await update.message.reply_text("❌ ɴᴏ ᴍᴀᴛᴄʜɪɴɢ ᴀɴɪᴍᴇ ғᴏᴜɴᴅ!")
         return
 
     keyboard = [
@@ -307,8 +313,8 @@ async def search(update: Update, context: ContextTypes.DEFAULT_TYPE):
 async def requestanime(update: Update, context: ContextTypes.DEFAULT_TYPE):
     request_text = " ".join(context.args).strip()
     if not request_text:
-        await update.message.reply_text("Please specify the anime you want to request.")
-    return
+        await update.message.reply_text("ᴘʟᴇᴀsᴇ sᴘᴇᴄɪғʏ ᴛʜᴇ ᴀɴɪᴍᴇ ʏᴏᴜ ᴡᴀɴᴛ ᴛᴏ requesᴛ.")
+        return
 
     requests = load_data(REQUESTS_FILE)  # now a list
 
@@ -323,7 +329,7 @@ async def requestanime(update: Update, context: ContextTypes.DEFAULT_TYPE):
     })
     save_data(REQUESTS_FILE, requests)
 
-    await update.message.reply_text(f"Your request for '{request_text}' has been recorded!")
+    await update.message.reply_text(f"✅ Your request for '{request_text}' has been recorded!")
 
     try:
         await context.bot.send_message(
@@ -392,6 +398,30 @@ async def deletepost(update: Update, context: ContextTypes.DEFAULT_TYPE):
     del posts[post_name]
     save_data(POSTS_FILE, posts)
     await update.message.reply_text(f"✅ Post '{post_name}' has been deleted.")
+
+# Admin-only command to remove a request (exact match, case-insensitive)
+@admin_only
+async def removereq(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    args = context.args
+    if not args:
+        await update.message.reply_text("Usage: /removereq <anime name>")
+        return
+
+    anime_name = " ".join(args).strip().lower()
+    requests = load_data(REQUESTS_FILE)
+
+    original_count = len(requests)
+
+    updated_requests = [r for r in requests if r["anime"].strip().lower() != anime_name]
+
+    save_data(REQUESTS_FILE, updated_requests)
+
+    removed_count = original_count - len(updated_requests)
+    if removed_count > 0:
+        await update.message.reply_text(f"✅ Removed {removed_count} request(s) for '{anime_name}'.")
+    else:
+        await update.message.reply_text(f"❌ No exact match found for '{anime_name}'.")
+
 
 # View all anime requests
 @admin_only
@@ -567,6 +597,7 @@ def main():
     application.add_handler(CommandHandler("animelist", animelist))
     application.add_handler(CommandHandler("search", search))
     application.add_handler(CommandHandler("requestanime", requestanime))
+    application.add_handler(CommandHandler("removereq", removereq))
     application.add_handler(CommandHandler("viewrequests", viewrequests))
     application.add_handler(CommandHandler("deletepost", deletepost))
     application.add_handler(CommandHandler("users", users))
