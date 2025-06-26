@@ -505,20 +505,17 @@ async def button_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
         if not post:
             await query.edit_message_text("❌ ᴘᴏsᴛ ɴᴏᴛ ғᴏᴜɴᴅ!")
             return
-
-        media = post["media"]
-        caption = post.get("caption", "")
-        buttons = build_keyboard(post.get("buttons"))
-
-        try:
-            await query.message.delete()
-        except Exception as e:
-            print(f"❗ ғᴀɪʟᴇᴅ ᴛᴏ ᴅᴇʟᴇᴛᴇ ᴍᴇssᴀɢᴇ: {e}")
-
-        if media["type"] == "photo":
-            await query.message.chat.send_photo(media["file_id"], caption=caption, reply_markup=buttons)
-        elif media["type"] == "document":
-            await query.message.chat.send_document(media["file_id"], caption=caption, reply_markup=buttons)
+            media = post["media"]
+            caption = post.get("caption", "")
+            buttons = build_keyboard(post.get("buttons"))
+            try:
+                await query.message.delete()
+            except Exception as e:
+                print(f"❗ ғᴀɪʟᴇᴅ ᴛᴏ ᴅᴇʟᴇᴛᴇ ᴍᴇssᴀɢᴇ: {e}")
+                if media["type"] == "photo":
+                    await query.message.chat.send_photo(media["file_id"], caption=caption, reply_markup=buttons)
+                elif media["type"] == "document":
+                    await query.message.chat.send_document(media["file_id"], caption=caption, reply_markup=buttons)
 
 
 # Cancel the conversation
