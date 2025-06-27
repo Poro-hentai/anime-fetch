@@ -613,10 +613,14 @@ def main():
         states={WAITING_FOR_NAME: [MessageHandler(filters.TEXT & ~filters.COMMAND, save_post)]},
         fallbacks=[CommandHandler("cancel", cancel)],
     )
-
+    
     broadcast_handler = ConversationHandler(
         entry_points=[CommandHandler("broadcast", broadcast_start)],
-        states={WAITING_FOR_BROADCAST: [MessageHandler(filters.TEXT & ~filters.COMMAND, broadcast_send)]},
+        states={
+        WAITING_FOR_BROADCAST: [
+            MessageHandler(filters.ALL & ~filters.COMMAND, broadcast_send)
+        ]
+    },
         fallbacks=[CommandHandler("cancel", cancel)],
     )
 
