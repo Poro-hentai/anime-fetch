@@ -634,27 +634,31 @@ def main():
         fallbacks=[CommandHandler("cancel", cancel)],
     )
 
-    application.add_handler(addpost_handler)
-    application.add_handler(broadcast_handler)
-    application.add_handler(CommandHandler("start", start))
-    application.add_handler(CommandHandler("animelist", animelist))
-    application.add_handler(CommandHandler("search", search))
-    application.add_handler(CommandHandler("requestanime", requestanime))
-    application.add_handler(CommandHandler("removereq", removereq))
-    application.add_handler(CommandHandler("viewrequests", viewrequests))
-    application.add_handler(CommandHandler("deletepost", deletepost))
-    application.add_handler(CommandHandler("users", users))
-    application.add_handler(CommandHandler("msguser", msguser))
-    application.add_handler(CommandHandler("download", download))
-    application.add_handler(CallbackQueryHandler(button_handler, pattern="^(about|help|back|close|viewpost:).+"))
-    application.add_handler(InlineQueryHandler(inlinequery))
-    application.add_handler(MessageHandler(filters.COMMAND, unknown_command))
-    application.post_init = send_restart_notice
-    application.run_polling(drop_pending_updates=True)
-    async def on_startup(app):
-        asyncio.create_task(auto_backup_task(app))
-        application = ApplicationBuilder().token(BOT_TOKEN).build()
-        application.post_init = on_startup  # 👈 Link backup task to bot startup
+    # 👇 Place this before run_polling
+async def on_startup(app):
+    await send_restart_notice(app)  # original restart notice
+    asyncio.create_task(auto_backup_task(app))  # start backup loop
+
+application.post_init = on_startup  # ✅ set startup function
+
+# 👇 Add handlers as you already did
+application.add_handler(addpost_handler)
+application.add_handler(broadcast_handler)
+application.add_handler(CommandHandler("start", start))
+application.add_handler(CommandHandler("animelist", animelist))
+application.add_handler(CommandHandler("search", search))
+application.add_handler(CommandHandler("requestanime", requestanime))
+application.add_handler(CommandHandler("removereq", removereq))
+application.add_handler(CommandHandler("viewrequests", viewrequests))
+application.add_handler(CommandHandler("deletepost", deletepost))
+application.add_handler(CommandHandler("users", users))
+application.add_handler(CommandHandler("msguser", msguser))
+application.add_handler(CommandHandler("download", download))
+application.add_handler(CallbackQueryHandler(button_handler, pattern="^(about|help|back|close|viewpost:.*)$"))
+application.add_handler(InlineQueryHandler(inlinequery))
+application.add_handler(MessageHandler(filters.COMMAND, unknown_command))
+# 👇 Then start polling
+application.run_polling(drop_pending_updates=True)
 
 # === Run Flask & Bot Together ===
 if __name__ == "__main__":
