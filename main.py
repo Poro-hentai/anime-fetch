@@ -1,4 +1,3 @@
-
 from telegram import (
     Update,
     InlineKeyboardMarkup,
@@ -17,23 +16,20 @@ from telegram.ext import (
 )
 from telegram import InlineQueryResultArticle, InputTextMessageContent
 from flask import Flask
-import asyncio
-import datetime
-from telegram import InputFile
 import logging
 import difflib
 import uuid
 import threading
 import json
 import os
+
 logging.basicConfig(level=logging.INFO)
 
-# Configuration
+# --- Configuration ---
 API_TOKEN = os.environ.get("API_TOKEN")
 POSTS_FILE = "posts.json"
 REQUESTS_FILE = "requests.json"
 USERS_FILE = "users.json"
-CHANNEL_ID = "-1002876730770"  # 🔁 Replace with your actual backup channel ID
 GROUP_CHAT = "@sister_leveling"  # Group username or chat ID where requests get forwarded
 
 for file_name in [POSTS_FILE, REQUESTS_FILE, USERS_FILE]:
@@ -87,7 +83,7 @@ HELP_CAPTION = (
 WAITING_FOR_NAME = 0
 WAITING_FOR_BROADCAST = 1
 
-# Utility functions
+# --- Utility Functions ---
 def load_data(file_name):
     with open(file_name, "r") as f:
         data = json.load(f)
@@ -100,83 +96,6 @@ def load_data(file_name):
 def save_data(file_name, data):
     with open(file_name, "w") as f:
         json.dump(data, f, indent=4)
-
-# Save user info who starts the bot
-async def save_user(update: Update):
-    user = update.effective_user
-    users = load_data(USERS_FILE)
-    # Save username, first name, last name, keyed by user id
-    users[str(user.id)] = {
-        "username": user.username or "",
-        "first_name": user.first_name or "",
-        "last_name": user.last_name or "",
-    }
-    save_data(USERS_FILE, users)
-
-#@usernameofbot to search anime anyhere
-async def inlinequery(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    query = update.inline_query.query.lower()
-    results = []
-
-    if not query:
-        return
-
-    posts = load_data(POSTS_FILE)
-    post_names = list(posts.keys())
-
-    matches = difflib.get_close_matches(query, post_names, n=10, cutoff=0.4)
-    matches += [name for name in post_names if query in name.lower()]
-    matches = list(dict.fromkeys(matches))  # Remove duplicates
-
-    for name in matches:
-        post = posts[name]
-        caption = post.get("caption", "No caption")
-        results.append(
-            InlineQueryResultArticle(
-                id=str(uuid.uuid4()),
-                title=name,
-                description=caption[:50] + "...",
-                input_message_content=InputTextMessageContent(f"*{name}*\n\n{caption}", parse_mode="Markdown")
-            )
-        )
-
-    await update.inline_query.answer(results[:20])  # Limit to 20 results
-
-
-# Start command handler
-async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    await save_user(update)
-    keyboard = [
-        [
-            InlineKeyboardButton("ᴀʙᴏᴜᴛ 📜", callback_data="about"),
-            InlineKeyboardButton("ʜᴇʟᴘ ⚙️", callback_data="help"),
-        ],
-        [InlineKeyboardButton("𝙲ʟᴏsᴇ", callback_data="close")],
-    ]
-    await update.message.reply_photo(
-        photo=START_URL,
-        caption=START_CAPTION,
-        reply_markup=InlineKeyboardMarkup(keyboard),
-    )
-
-# Admin-only decorator
-def admin_only(func):
-    async def wrapper(update: Update, context: ContextTypes.DEFAULT_TYPE):
-        admin_ids = [5759232282]  # List of allowed admin IDs
-        user_id = update.effective_user.id
-
-        if user_id not in admin_ids:
-            # If it's a command
-            if hasattr(update, "message") and update.message:
-                await update.message.reply_text("ʙᴀᴋᴀ! ʏᴏᴜ ᴀʀᴇ ɴᴏᴛ ᴍʏ sᴇɴᴘᴀɪ.")
-            # If it's a button press
-            elif hasattr(update, "callback_query") and update.callback_query:
-                await update.callback_query.answer("ʙᴀᴋᴀ! ʏᴏᴜ ᴀʀᴇ ɴᴏᴛ ᴍʏ sᴇɴᴘᴀɪ.", show_alert=True)
-
-            return ConversationHandler.END
-        return await func(update, context)
-    return wrapper
-
 
 # Helper: parse inline keyboard buttons from the message (if any)
 def extract_buttons(message):
@@ -194,6 +113,70 @@ def extract_buttons(message):
             buttons.append(row_buttons)
         return buttons
     return None
+
+# Helper to recreate InlineKeyboardMarkup from stored buttons
+def build_keyboard(buttons):
+    if not buttons:
+        return None
+    keyboard = []
+    for row in buttons:
+        kb_row = []
+        for btn in row:
+            if "callback_data" in btn:
+                kb_row.append(InlineKeyboardButton(text=btn["text"], callback_data=btn["callback_data"]))
+            elif "url" in btn:
+                kb_row.append(InlineKeyboardButton(text=btn["text"], url=btn["url"]))
+            else:
+                kb_row.append(InlineKeyboardButton(text=btn["text"], callback_data="noop"))
+        keyboard.append(kb_row)
+    return InlineKeyboardMarkup(keyboard)
+
+# Admin-only decorator
+def admin_only(func):
+    async def wrapper(update: Update, context: ContextTypes.DEFAULT_TYPE):
+        admin_ids = [5759232282]  # List of allowed admin IDs
+        user_id = update.effective_user.id
+
+        if user_id not in admin_ids:
+            # If it's a command
+            if hasattr(update, "message") and update.message:
+                await update.message.reply_text("ʙᴀᴋᴀ! ʏᴏᴜ ᴀʀᴇ ɴᴏᴛ ᴍʏ sᴇɴᴘᴀɪ.")
+            # If it's a button press
+            elif hasattr(update, "callback_query") and update.callback_query:
+                await update.callback_query.answer("ʙᴀᴋᴀ! ʏᴏᴜ ᴀʀᴇ ɴᴏᴛ ᴍʏ sᴇɴᴘᴀɪ.", show_alert=True)
+            return ConversationHandler.END
+        return await func(update, context)
+    return wrapper
+
+# --- Bot Command Handlers ---
+
+# Save user info who starts the bot
+async def save_user(update: Update):
+    user = update.effective_user
+    users = load_data(USERS_FILE)
+    # Save username, first name, last name, keyed by user id
+    users[str(user.id)] = {
+        "username": user.username or "",
+        "first_name": user.first_name or "",
+        "last_name": user.last_name or "",
+    }
+    save_data(USERS_FILE, users)
+
+# Start command handler
+async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    await save_user(update)
+    keyboard = [
+        [
+            InlineKeyboardButton("ᴀʙᴏᴜᴛ 📜", callback_data="about"),
+            InlineKeyboardButton("ʜᴇʟᴘ ⚙️", callback_data="help"),
+        ],
+        [InlineKeyboardButton("𝙲ʟᴏsᴇ", callback_data="close")],
+    ]
+    await update.message.reply_photo(
+        photo=START_URL,
+        caption=START_CAPTION,
+        reply_markup=InlineKeyboardMarkup(keyboard),
+    )
 
 # addpost command starts here
 @admin_only
@@ -217,7 +200,6 @@ async def addpost(update: Update, context: ContextTypes.DEFAULT_TYPE):
         return ConversationHandler.END
 
     caption = reply_msg.caption or ""
-
     buttons = extract_buttons(reply_msg)
 
     context.user_data["media"] = {"file_id": media_file_id, "type": media_type}
@@ -226,27 +208,6 @@ async def addpost(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
     await update.message.reply_text("ᴡʜᴀᴛ ɴᴀᴍᴇ sʜᴏᴜʟᴅ ɪ sᴀᴠᴇ ᴛʜɪs ᴘᴏsᴛ ᴀs? ʀᴇᴘʟʏ ᴡɪᴛʜ ᴛʜᴇ namᴇ.")
     return WAITING_FOR_NAME
-
-# Backup Json Files In Channel
-async def auto_backup_task(app):
-    while True:
-        try:
-            files_to_backup = ["posts.json", "users.json", "requests.json"]
-            for file in files_to_backup:
-                if os.path.exists(file):
-                    with open(file, "rb") as f:
-                        await app.bot.send_document(
-                            chat_id=CHANNEL_ID,
-                            document=InputFile(f),
-                            filename=file,
-                            caption=f"📦 ᴀᴜᴛᴏ ʙᴀᴄᴋᴜᴘ: `{file}`\n🕒 {datetime.datetime.now().strftime('%Y-%m-%d %H:%M')}",
-                            parse_mode="Markdown"
-                        )
-            print("[✔]ᴀᴜᴛᴏ ʙᴀᴄᴋᴜᴘ sᴇɴᴛ sᴜᴄᴄᴇssғᴜʟʟʏ.")
-        except Exception as e:
-            print(f"[❌] ᴀᴜᴛᴏ ʙᴀᴄᴋᴜᴘ ғᴀɪʟᴇᴅ: {e}")
-
-        await asyncio.sleep(3600)  # Wait 1 hour
 
 # Save post with media, caption, buttons
 async def save_post(update: Update, context: ContextTypes.DEFAULT_TYPE):
@@ -260,7 +221,6 @@ async def save_post(update: Update, context: ContextTypes.DEFAULT_TYPE):
     buttons = context.user_data.get("buttons")
 
     posts = load_data(POSTS_FILE)
-
     posts[post_name] = {
         "media": media,
         "caption": caption,
@@ -270,23 +230,6 @@ async def save_post(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
     await update.message.reply_text(f"Posᴛ sᴀᴠᴇᴅ ᴀs '{post_name}'!")
     return ConversationHandler.END
-
-# Helper to recreate InlineKeyboardMarkup from stored buttons
-def build_keyboard(buttons):
-    if not buttons:
-        return None
-    keyboard = []
-    for row in buttons:
-        kb_row = []
-        for btn in row:
-            if "callback_data" in btn:
-                kb_row.append(InlineKeyboardButton(text=btn["text"], callback_data=btn["callback_data"]))
-            elif "url" in btn:
-                kb_row.append(InlineKeyboardButton(text=btn["text"], url=btn["url"]))
-            else:
-                kb_row.append(InlineKeyboardButton(text=btn["text"], callback_data="noop"))
-        keyboard.append(kb_row)
-    return InlineKeyboardMarkup(keyboard)
 
 # Show Anime List
 async def animelist(update: Update, context: ContextTypes.DEFAULT_TYPE):
@@ -307,7 +250,7 @@ async def animelist(update: Update, context: ContextTypes.DEFAULT_TYPE):
     for letter in sorted(grouped):
         text += f"🔠 *{letter}*\n"
         for title in grouped[letter]:
-            text += f"• `{title}`\n"
+            text += f"• {title}\n"
         text += "\n"
 
     await update.message.reply_text(
@@ -343,11 +286,10 @@ async def search(update: Update, context: ContextTypes.DEFAULT_TYPE):
         [InlineKeyboardButton(name, callback_data=f"viewpost:{name}")] for name in all_matches
     ]
     await update.message.reply_text(
-        f"🔎 Search results for: `{query}`",
+        f"🔎 Search results for: {query}",
         reply_markup=InlineKeyboardMarkup(keyboard),
         parse_mode="Markdown"
     )
-
 
 # Request anime command: save multiple requests as a list, forward to group
 async def requestanime(update: Update, context: ContextTypes.DEFAULT_TYPE):
@@ -379,7 +321,7 @@ async def requestanime(update: Update, context: ContextTypes.DEFAULT_TYPE):
     except Exception as e:
         print(f"ғᴀɪʟᴇᴅ ᴛᴏ sᴇɴᴅ ʀᴇǫᴜᴇsᴛ ᴛᴏ ɢʀᴏᴜᴘ: {e}")
 
-#send msg to user
+# send msg to user
 @admin_only
 async def msguser(update: Update, context: ContextTypes.DEFAULT_TYPE):
     args = context.args
@@ -413,15 +355,11 @@ async def msguser(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
     try:
         await context.bot.send_message(chat_id=user_id, text=msg_text)
-        await update.message.reply_text(f"✅ ᴍᴇssᴀɢᴇ sᴇɴᴛ ᴛᴏ `{user_id}`", parse_mode="Markdown")
+        await update.message.reply_text(f"✅ ᴍᴇssᴀɢᴇ sᴇɴᴛ ᴛᴏ {user_id}", parse_mode="Markdown")
     except Exception as e:
         await update.message.reply_text(f"❌ ғᴀɪʟᴇᴅ ᴛᴏ sᴇɴᴅ ᴍᴇssᴀɢᴇ: {e}")
 
-#unknown command replyer
-async def unknown_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    await update.message.reply_text("ʙᴀᴋᴀ! ᴜɴᴋɴᴏᴡɴ ᴄᴏᴍᴍᴀɴᴅ: ᴜsᴇ /start ᴛᴏ sᴇᴇ ᴀᴠᴀɪʟᴀʙʟᴇ commanᴅs.")
-    
-#deletepost
+# deletepost
 @admin_only
 async def deletepost(update: Update, context: ContextTypes.DEFAULT_TYPE):
     if not context.args:
@@ -462,13 +400,6 @@ async def removereq(update: Update, context: ContextTypes.DEFAULT_TYPE):
     else:
         await update.message.reply_text(f"❌ ɴᴏ ᴇxᴀᴄᴛ ᴍᴀᴛᴄʜ ғᴏᴜɴᴅ ғᴏʀ '{anime_name}'.")
 
-async def send_restart_notice(application):
-    try:
-        await application.bot.send_message(chat_id="@sister_leveling", text="♻️ ʙᴏᴛ ʀᴇsᴛᴀʀᴛᴇᴅ ʙʏ @LORD_SHADOW_SAMA")
-    except Exception as e:
-        print(f"❌ ғᴀɪʟᴇᴅ ᴛᴏ sᴇɴᴅ ʀᴇsᴛᴀʀᴛ ᴍᴇssᴀɢᴇ: {e}")
-
-
 # View all anime requests
 @admin_only
 async def viewrequests(update: Update, context: ContextTypes.DEFAULT_TYPE):
@@ -482,6 +413,78 @@ async def viewrequests(update: Update, context: ContextTypes.DEFAULT_TYPE):
         user_display = f"@{req['username']}" if req['username'] else "Unknown"
         response += f"{user_display}: {req['anime']}\n"
     await update.message.reply_text(response)
+
+# Admin-only command: show how many users have started the bot
+@admin_only
+async def users(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    users = load_data(USERS_FILE)
+    count = len(users)
+    await update.message.reply_text(f"ᴛᴏᴛᴀʟ ᴜɴɪǫᴜᴇ ᴜsᴇʀs ᴡʜᴏ sᴛᴀʀᴛᴇᴅ ᴛʜᴇ ʙᴏᴛ: {count}")
+    
+# Download json files
+@admin_only
+async def download(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    files = [POSTS_FILE, USERS_FILE, REQUESTS_FILE]
+    for file in files:
+        if os.path.exists(file):
+            await update.message.reply_document(document=open(file, "rb"), filename=file)
+        else:
+            await update.message.reply_text(f"❌ ғɪʟᴇ {file} ɴᴏᴛ ғᴏᴜɴᴅ.", parse_mode="Markdown")
+
+# Admin-only command: broadcast message to all users
+@admin_only
+async def broadcast_start(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    await update.message.reply_text("ᴘʟᴇᴀsᴇ sᴇɴᴅ ᴍᴇ ᴛʜᴇ ᴍᴇssᴀɢʀ ʏᴏᴜ ᴡᴀɴᴛ ᴛᴏ ʙʀᴏᴀᴅᴄᴀsᴛ ᴛᴏ ᴀʟʟ ᴜsᴇʀs.")
+    return WAITING_FOR_BROADCAST
+
+async def broadcast_send(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    users = load_data(USERS_FILE)
+
+    message = update.message.reply_to_message or update.message
+    reply_markup = message.reply_markup if message.reply_markup else None
+
+    sent, failed = 0, 0
+
+    for user_id in users:
+        try:
+            if message.photo:
+                await context.bot.send_photo(
+                    chat_id=int(user_id),
+                    photo=message.photo[-1].file_id,
+                    caption=message.caption or "",
+                    reply_markup=reply_markup
+                )
+            elif message.document:
+                await context.bot.send_document(
+                    chat_id=int(user_id),
+                    document=message.document.file_id,
+                    caption=message.caption or "",
+                    reply_markup=reply_markup
+                )
+            else:
+                await context.bot.send_message(
+                    chat_id=int(user_id),
+                    text=message.text or "",
+                    reply_markup=reply_markup
+                )
+            sent += 1
+        except Exception as e:
+            failed += 1
+            print(f"❌ғᴀɪʟᴇᴅ ᴛᴏ sᴇɴᴅ ᴛᴏ {user_id}: {e}")
+
+    await update.message.reply_text(f"✅ ʙʀᴏᴀᴅᴄᴀsᴛ ᴄᴏᴍᴘʟᴇᴛᴇ.\n sᴇɴᴛ: {sent}\n ғᴀɪʟᴇᴅ: {failed}")
+    return ConversationHandler.END
+
+# Cancel the conversation
+async def cancel(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    await update.message.reply_text("ᴏᴘᴇʀᴀᴛɪᴏɴ canceleᴅ.")
+    return ConversationHandler.END
+
+# unknown command replyer
+async def unknown_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    await update.message.reply_text("ʙᴀᴋᴀ! ᴜɴᴋɴᴏᴡɴ ᴄᴏᴍᴍᴀɴᴅ: ᴜsᴇ /start ᴛᴏ sᴇᴇ ᴀᴠᴀɪʟᴀʙʟᴇ commanᴅs.")
+    
+# --- Callback Query Handlers ---
 
 # Handle inline button queries for about/help/back/close
 async def button_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
@@ -532,93 +535,61 @@ async def button_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
         if not post:
             await query.edit_message_text("❌ ᴘᴏsᴛ ɴᴏᴛ ғᴏᴜɴᴅ!")
             return
-            media = post["media"]
-            caption = post.get("caption", "")
-            buttons = build_keyboard(post.get("buttons"))
-            try:
-                await query.message.delete()
-            except Exception as e:
-                print(f"❗ ғᴀɪʟᴇᴅ ᴛᴏ ᴅᴇʟᴇᴛᴇ ᴍᴇssᴀɢᴇ: {e}")
-                if media["type"] == "photo":
-                    await query.message.chat.send_photo(media["file_id"], caption=caption, reply_markup=buttons)
-                elif media["type"] == "document":
-                    await query.message.chat.send_document(media["file_id"], caption=caption, reply_markup=buttons)
-
-
-# Cancel the conversation
-async def cancel(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    await update.message.reply_text("ᴏᴘᴇʀᴀᴛɪᴏɴ canceleᴅ.")
-    return ConversationHandler.END
-
-# Admin-only command: show how many users have started the bot
-@admin_only
-async def users(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    users = load_data(USERS_FILE)
-    count = len(users)
-    await update.message.reply_text(f"ᴛᴏᴛᴀʟ ᴜɴɪǫᴜᴇ ᴜsᴇʀs ᴡʜᴏ sᴛᴀʀᴛᴇᴅ ᴛʜᴇ ʙᴏᴛ: {count}")
-    
-#Download json
-@admin_only
-async def download(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    files = [POSTS_FILE, USERS_FILE, REQUESTS_FILE]
-    for file in files:
-        if os.path.exists(file):
-            await update.message.reply_document(document=open(file, "rb"), filename=file)
-        else:
-            await update.message.reply_text(f"❌ ғɪʟᴇ `{file}` ɴᴏᴛ ғᴏᴜɴᴅ.", parse_mode="Markdown")
-
-# Admin-only command: broadcast message to all users
-@admin_only
-async def broadcast_start(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    await update.message.reply_text("ᴘʟᴇᴀsᴇ sᴇɴᴅ ᴍᴇ ᴛʜᴇ ᴍᴇssᴀɢʀ ʏᴏᴜ ᴡᴀɴᴛ ᴛᴏ ʙʀᴏᴀᴅᴄᴀsᴛ ᴛᴏ ᴀʟʟ ᴜsᴇʀs.")
-    return WAITING_FOR_BROADCAST
-
-async def broadcast_send(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    users = load_data(USERS_FILE)
-
-    message = update.message.reply_to_message or update.message
-    reply_markup = message.reply_markup if message.reply_markup else None
-
-    sent, failed = 0, 0
-
-    for user_id in users:
+        media = post["media"]
+        caption = post.get("caption", "")
+        buttons = build_keyboard(post.get("buttons"))
         try:
-            if message.photo:
-                await context.bot.send_photo(
-                    chat_id=int(user_id),
-                    photo=message.photo[-1].file_id,
-                    caption=message.caption or "",
-                    reply_markup=reply_markup
-                )
-            elif message.document:
-                await context.bot.send_document(
-                    chat_id=int(user_id),
-                    document=message.document.file_id,
-                    caption=message.caption or "",
-                    reply_markup=reply_markup
-                )
-            else:
-                await context.bot.send_message(
-                    chat_id=int(user_id),
-                    text=message.text or "",
-                    reply_markup=reply_markup
-                )
-            sent += 1
+            await query.message.delete()
         except Exception as e:
-            failed += 1
-            print(f"❌ғᴀɪʟᴇᴅ ᴛᴏ sᴇɴᴅ ᴛᴏ {user_id}: {e}")
+            print(f"❗ ғᴀɪʟᴇᴅ ᴛᴏ ᴅᴇʟᴇᴛᴇ ᴍᴇssᴀɢᴇ: {e}")
+        if media["type"] == "photo":
+            await query.message.chat.send_photo(media["file_id"], caption=caption, reply_markup=buttons)
+        elif media["type"] == "document":
+            await query.message.chat.send_document(media["file_id"], caption=caption, reply_markup=buttons)
 
-    await update.message.reply_text(f"✅ ʙʀᴏᴀᴅᴄᴀsᴛ ᴄᴏᴍᴘʟᴇᴛᴇ.\n sᴇɴᴛ: {sent}\n ғᴀɪʟᴇᴅ: {failed}")
-    return ConversationHandler.END
+# @usernameofbot to search anime anyhere
+async def inlinequery(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    query = update.inline_query.query.lower()
+    results = []
 
-# === Flask for Render Uptime ===
+    if not query:
+        return
+
+    posts = load_data(POSTS_FILE)
+    post_names = list(posts.keys())
+
+    matches = difflib.get_close_matches(query, post_names, n=10, cutoff=0.4)
+    matches += [name for name in post_names if query in name.lower()]
+    matches = list(dict.fromkeys(matches))  # Remove duplicates
+
+    for name in matches:
+        post = posts[name]
+        caption = post.get("caption", "No caption")
+        results.append(
+            InlineQueryResultArticle(
+                id=str(uuid.uuid4()),
+                title=name,
+                description=caption[:50] + "...",
+                input_message_content=InputTextMessageContent(f"*{name}*\n\n{caption}", parse_mode="Markdown")
+            )
+        )
+
+    await update.inline_query.answer(results[:20])  # Limit to 20 results
+
+async def send_restart_notice(application):
+    try:
+        await application.bot.send_message(chat_id="@sister_leveling", text="♻️ ʙᴏᴛ ʀᴇsᴛᴀʀᴛᴇᴅ ʙʏ @LORD_SHADOW_SAMA")
+    except Exception as e:
+        print(f"❌ ғᴀɪʟᴇᴅ ᴛᴏ sᴇɴᴅ ʀᴇsᴛᴀʀᴛ ᴍᴇssᴀɢᴇ: {e}")
+
+# --- Flask for Render Uptime ---
 app = Flask(__name__)
 
 @app.route('/')
 def home():
     return "✅ Bot is running!"
 
-# === Main Bot Function ===
+# --- Main Bot Function ---
 def main():
     application = ApplicationBuilder().token(API_TOKEN).build()
 
@@ -634,41 +605,25 @@ def main():
         fallbacks=[CommandHandler("cancel", cancel)],
     )
 
-    # 👇 Place this before run_polling
-async def on_startup(app):
-    await send_restart_notice(app)  # original restart notice
-    asyncio.create_task(auto_backup_task(app))  # start backup loop
+    application.add_handler(addpost_handler)
+    application.add_handler(broadcast_handler)
+    application.add_handler(CommandHandler("start", start))
+    application.add_handler(CommandHandler("animelist", animelist))
+    application.add_handler(CommandHandler("search", search))
+    application.add_handler(CommandHandler("requestanime", requestanime))
+    application.add_handler(CommandHandler("removereq", removereq))
+    application.add_handler(CommandHandler("viewrequests", viewrequests))
+    application.add_handler(CommandHandler("deletepost", deletepost))
+    application.add_handler(CommandHandler("users", users))
+    application.add_handler(CommandHandler("msguser", msguser))
+    application.add_handler(CommandHandler("download", download))
+    application.add_handler(CallbackQueryHandler(button_handler))
+    application.add_handler(InlineQueryHandler(inlinequery))
+    application.add_handler(MessageHandler(filters.COMMAND, unknown_command))
+    application.post_init = send_restart_notice
+    application.run_polling(drop_pending_updates=True)
 
-# Create the Application
-application = ApplicationBuilder().token(API_TOKEN).build()
-
-# Add all your handlers
-application.add_handler(addpost_handler)
-application.add_handler(broadcast_handler)
-application.add_handler(CommandHandler("start", start))
-application.add_handler(CommandHandler("animelist", animelist))
-application.add_handler(CommandHandler("search", search))
-application.add_handler(CommandHandler("requestanime", requestanime))
-application.add_handler(CommandHandler("removereq", removereq))
-application.add_handler(CommandHandler("viewrequests", viewrequests))
-application.add_handler(CommandHandler("deletepost", deletepost))
-application.add_handler(CommandHandler("users", users))
-application.add_handler(CommandHandler("msguser", msguser))
-application.add_handler(CommandHandler("download", download))
-application.add_handler(CallbackQueryHandler(button_handler, pattern="^(about|help|back|close|viewpost:.*)$"))
-application.add_handler(InlineQueryHandler(inlinequery))
-application.add_handler(MessageHandler(filters.COMMAND, unknown_command))
-# ✅ Now set the post_init AFTER defining application
-async def on_startup(app):
-    await send_restart_notice(app)
-    asyncio.create_task(auto_backup_task(app))
-
-application.post_init = on_startup
-
-# ✅ Finally run polling
-application.run_polling(drop_pending_updates=True)
-
-# === Run Flask & Bot Together ===
+# --- Run Flask & Bot Together ---
 if __name__ == "__main__":
     import threading
     # It's good practice to get the port from environment variables in Render
