@@ -639,9 +639,10 @@ async def on_startup(app):
     await send_restart_notice(app)  # original restart notice
     asyncio.create_task(auto_backup_task(app))  # start backup loop
 
-application.post_init = on_startup  # ✅ set startup function
+# Create the Application
+application = ApplicationBuilder().token(BOT_TOKEN).build()
 
-# 👇 Add handlers as you already did
+# Add all your handlers
 application.add_handler(addpost_handler)
 application.add_handler(broadcast_handler)
 application.add_handler(CommandHandler("start", start))
@@ -657,7 +658,14 @@ application.add_handler(CommandHandler("download", download))
 application.add_handler(CallbackQueryHandler(button_handler, pattern="^(about|help|back|close|viewpost:.*)$"))
 application.add_handler(InlineQueryHandler(inlinequery))
 application.add_handler(MessageHandler(filters.COMMAND, unknown_command))
-# 👇 Then start polling
+# ✅ Now set the post_init AFTER defining application
+async def on_startup(app):
+    await send_restart_notice(app)
+    asyncio.create_task(auto_backup_task(app))
+
+application.post_init = on_startup
+
+# ✅ Finally run polling
 application.run_polling(drop_pending_updates=True)
 
 # === Run Flask & Bot Together ===
