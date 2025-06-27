@@ -439,11 +439,7 @@ async def broadcast_send(update: Update, context: ContextTypes.DEFAULT_TYPE):
     users = load_data(USERS_FILE)
 
     message = update.message.reply_to_message or update.message
-    reply_markup = None
-    if update.message.reply_to_message:
-    reply_markup = update.message.reply_to_message.reply_markup
-else:
-    reply_markup = update.message.reply_markup
+    reply_markup = message.reply_markup if message.reply_markup else None
 
     caption = message.caption or ""
     sent, failed = 0, 0
