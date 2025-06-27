@@ -620,7 +620,7 @@ def main():
     application.add_handler(CommandHandler("users", users))
     application.add_handler(CommandHandler("msguser", msguser))
     application.add_handler(CommandHandler("download", download))
-    application.add_handler(CallbackQueryHandler(button_handler))
+    application.add_handler(CallbackQueryHandler(button_handler, pattern=".*"))
     application.add_handler(InlineQueryHandler(inlinequery))
     application.add_handler(MessageHandler(filters.COMMAND, unknown_command))
     application.post_init = send_restart_notice
