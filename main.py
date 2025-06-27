@@ -640,7 +640,7 @@ async def on_startup(app):
     asyncio.create_task(auto_backup_task(app))  # start backup loop
 
 # Create the Application
-application = ApplicationBuilder().token(BOT_TOKEN).build()
+application = ApplicationBuilder().token(API_TOKEN).build()
 
 # Add all your handlers
 application.add_handler(addpost_handler)
