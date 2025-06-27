@@ -1,3 +1,4 @@
+
 from telegram import (
     Update,
     InlineKeyboardMarkup,
@@ -16,6 +17,9 @@ from telegram.ext import (
 )
 from telegram import InlineQueryResultArticle, InputTextMessageContent
 from flask import Flask
+import asyncio
+import datetime
+from telegram import InputFile
 import logging
 import difflib
 import uuid
@@ -29,6 +33,7 @@ API_TOKEN = os.environ.get("API_TOKEN")
 POSTS_FILE = "posts.json"
 REQUESTS_FILE = "requests.json"
 USERS_FILE = "users.json"
+CHANNEL_ID = "-1002876730770"  # 🔁 Replace with your actual backup channel ID
 GROUP_CHAT = "@sister_leveling"  # Group username or chat ID where requests get forwarded
 
 for file_name in [POSTS_FILE, REQUESTS_FILE, USERS_FILE]:
@@ -221,6 +226,27 @@ async def addpost(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
     await update.message.reply_text("ᴡʜᴀᴛ ɴᴀᴍᴇ sʜᴏᴜʟᴅ ɪ sᴀᴠᴇ ᴛʜɪs ᴘᴏsᴛ ᴀs? ʀᴇᴘʟʏ ᴡɪᴛʜ ᴛʜᴇ namᴇ.")
     return WAITING_FOR_NAME
+
+# Backup Json Files In Channel
+async def auto_backup_task(app):
+    while True:
+        try:
+            files_to_backup = ["posts.json", "users.json", "requests.json"]
+            for file in files_to_backup:
+                if os.path.exists(file):
+                    with open(file, "rb") as f:
+                        await app.bot.send_document(
+                            chat_id=CHANNEL_ID,
+                            document=InputFile(f),
+                            filename=file,
+                            caption=f"📦 ᴀᴜᴛᴏ ʙᴀᴄᴋᴜᴘ: `{file}`\n🕒 {datetime.datetime.now().strftime('%Y-%m-%d %H:%M')}",
+                            parse_mode="Markdown"
+                        )
+            print("[✔]ᴀᴜᴛᴏ ʙᴀᴄᴋᴜᴘ sᴇɴᴛ sᴜᴄᴄᴇssғᴜʟʟʏ.")
+        except Exception as e:
+            print(f"[❌] ᴀᴜᴛᴏ ʙᴀᴄᴋᴜᴘ ғᴀɪʟᴇᴅ: {e}")
+
+        await asyncio.sleep(3600)  # Wait 1 hour
 
 # Save post with media, caption, buttons
 async def save_post(update: Update, context: ContextTypes.DEFAULT_TYPE):
@@ -620,11 +646,15 @@ def main():
     application.add_handler(CommandHandler("users", users))
     application.add_handler(CommandHandler("msguser", msguser))
     application.add_handler(CommandHandler("download", download))
-    application.add_handler(CallbackQueryHandler(button_handler, pattern=".*"))
+    application.add_handler(CallbackQueryHandler(button_handler, pattern="^(about|help|back|close|viewpost:).+"))
     application.add_handler(InlineQueryHandler(inlinequery))
     application.add_handler(MessageHandler(filters.COMMAND, unknown_command))
     application.post_init = send_restart_notice
     application.run_polling(drop_pending_updates=True)
+    async def on_startup(app):
+        asyncio.create_task(auto_backup_task(app))
+        application = ApplicationBuilder().token(BOT_TOKEN).build()
+        application.post_init = on_startup  # 👈 Link backup task to bot startup
 
 # === Run Flask & Bot Together ===
 if __name__ == "__main__":
