@@ -43,36 +43,34 @@ ABOUT_URL = "https://telegra.ph/file/9d18345731db88fff4f8c-d2b3920631195c5747.jp
 HELP_URL = "https://telegra.ph/file/e6ec31fc792d072da2b7e-54e7c7d4c5651823b3.jpg"
 
 START_CAPTION = (
-    "🌸 〘 ᴡᴇʟᴄᴏᴍᴇ ᴛᴏ ❝ᴀɴɪᴍᴇ ɢᴀʀᴅᴇɴ❞ 〙🌸\n"
-    "🌀 ʟᴇᴛ ᴛʜɪs ʙᴏᴛ ʙᴇ ʏᴏᴜʀ ɢᴜɪᴅᴇ ᴛᴏ:\n"
-    "➤ ᴅᴏᴡɴʟᴏᴀᴅ ʏᴏᴜʀ ғᴀᴠᴏʀɪᴛᴇ ᴀɴɪᴍᴇ 🎥\n"
-    "➤ sᴇɴᴅ ᴀɴɪᴍᴇ ʀᴇǫᴜᴇsᴛs 📬\n"
-    "━━━━━━━━━━━━━━━━━━━\n"
+    "🌸 ᴡᴇʟᴄᴏᴍᴇ ᴛᴏ「 ᴀɴɪᴍᴇ ɢᴀʀᴅᴇɴ 」🌸\n"
+    "━━━━━━━━━━━━━━━━━━━━━━━━━━"
+    "➤ ᴅᴏᴡɴʟᴏᴀᴅ ʏᴏᴜʀ ғᴀᴠᴏʀɪᴛᴇ ᴀɴɪᴍᴇ.\n"
+    "➤ sᴇɴᴅ ᴀɴɪᴍᴇ ʀᴇǫᴜᴇsᴛs. \n"
+    "━━━━━━━━━━━━━━━━━━━━━━━━━━\n"
     "🔰 ɴᴀᴠɪɢᴀᴛᴇ ᴛʜᴇ ɢᴀʀᴅᴇɴ:\n"
-    "⤷ ⚙️ ᴛᴀᴘ 『 ʜᴇʟᴘ 』ᴛᴏ ᴠɪᴇᴡ ᴀʟʟ ᴄᴏᴍᴍᴀɴᴅs\n"
-    "⤷ 📜 ᴛᴀᴘ 『 ᴀʙᴏᴜᴛ 』ᴛᴏ sᴇᴇ ᴏᴜʀ ᴄʜᴀɴɴᴇʟs & ᴍɪssɪᴏɴ\n"
-    "⤷ ❌ ᴛᴀᴘ 『 ᴄʟᴏsᴇ 』ᴛᴏ ʜɪᴅᴇ ᴛʜɪs ᴍᴇssᴀɢᴇ\n"
-    "━━━━━━━━━━━━━━━━━━━\n"
+    "⤷ ᴛᴀᴘ 『 ʜᴇʟᴘ 』ᴛᴏ ᴠɪᴇᴡ ᴀʟʟ ᴄᴏᴍᴍᴀɴᴅs\n"
+    "⤷ ᴛᴀᴘ 『 ᴀʙᴏᴜᴛ 』ᴛᴏ sᴇᴇ ᴏᴜʀ ᴄʜᴀɴɴᴇʟs & ᴍɪssɪᴏɴ\n"
+    "⤷ ᴛᴀᴘ 『 ᴄʟᴏsᴇ 』ᴛᴏ ʜɪᴅᴇ ᴛʜɪs ᴍᴇssᴀɢᴇ\n"
 )
 
 ABOUT_CAPTION = (
-    "📜 *ᴀʙᴏᴜᴛ sᴇᴄᴛɪᴏɴ*\n\n"
-    "🎥 ᴛʜɪs ʙᴏᴛ ɪs ᴍᴀᴅᴇ ғᴏʀ ʜᴇʟᴘɪɴɢ ᴜsᴇʀs ғɪɴᴅ & ʀᴇǫᴜᴇsᴛ ᴀɴɪᴍᴇ easilʏ.\n\n"
+    " ᴀʙᴏᴜᴛ sᴇᴄᴛɪᴏɴ:-\n"
+    "🎥 ᴛʜɪs ʙᴏᴛ ɪs ᴍᴀᴅᴇ ғᴏʀ ʜᴇʟᴘɪɴɢ ᴜsᴇʀs ғɪɴᴅ & ʀᴇǫᴜᴇsᴛ ᴀɴɪᴍᴇ easilʏ.\n"
     "━━━━━━━━━━━━━━━━━━━━━━━━━━\n\n"
-    "📌 ᴏғғɪᴄɪᴀʟ ᴄʜᴀɴɴᴇʟs & ɢʀᴏᴜᴘs:\n"
-    "• 💬 @sister_leveling - ᴀɴɪᴍᴇ ɢʀᴏᴜᴘ\n"
+    "=>📌 ᴏғғɪᴄɪᴀʟ ᴄʜᴀɴɴᴇʟs & ɢʀᴏᴜᴘs:\n"
+    "• 💬 @sister_leveling  - ᴀɴɪᴍᴇ ɢʀᴏᴜᴘ\n"
     "• 🔗 @Lord_Shadow_Sama - ᴀɪᴍᴇ ᴄʜᴀɴɴᴇʟ\n"
-    "• 🌟 @Garden_Sama - ɢᴀʀᴅᴇɴ\n\n"
-    "❓ɪғ ʏᴏᴜ ғᴀᴄᴇ ᴀɴʏ ɪssᴜᴇs, ғᴇᴇʟ ғʀᴇᴇ ᴛᴏ ᴀsᴋ ғᴏʀ ʜᴇʟᴘ ɪɴ ᴏᴜʀ ɢʀᴏᴜᴘ."
+    "• 🌟 @Garden_Sama      - ɢᴀʀᴅᴇɴ\n\n"
+    "❓ɪғ ʏᴏᴜ ғᴀᴄᴇ ᴀɴʏ ɪssᴜᴇs, ғᴇᴇʟ ғʀᴇᴇ ᴛᴏ ᴀsᴋ ғᴏʀ ʜᴇʟᴘ ɪɴ ᴏᴜʀ ᴀɴɪᴍᴇ ɢʀᴏᴜᴘ."
 )
 
 HELP_CAPTION = (
-    "⚙️ ʜᴇʟᴘ\n\n"
     "ᴄᴏᴍᴍᴀᴅs:\n"
     "/start - sᴛᴀʀᴛ ᴍᴇssᴀɢᴇ ᴏʀ sᴇᴇ ᴀʙᴏᴜᴛ/ʜᴇʟᴘ\n"
     "/animelist - ʟɪsᴛ ᴀʟʟ sᴀᴠᴇᴅ ᴀɴɪᴍᴇ ᴘᴏsᴛs\n"
-    "/search <term> - sᴇᴀʀᴄʜ ᴀɴɪᴍᴇ ᴘᴏsᴛs ʙʏ ɴᴀᴍᴇ\n"
-    "/requestanime <ᴀɴɪᴍᴇ ɴᴀᴍᴇ> - ʀᴇǫᴜᴇsᴛ ᴀɴ ᴀɴɪᴍᴇ (ʏᴏᴜʀ ʀᴇǫᴜᴇsᴛ ᴡɪʟʟ ʙᴇ sᴇɴᴛ ᴛᴏ ᴛʜᴇ ɢʀᴏᴜᴘ)\n"
+    "/search Naruto - sᴇᴀʀᴄʜ ᴀɴɪᴍᴇ ᴘᴏsᴛs ʙʏ ɴᴀᴍᴇ\n"
+    "/requestanime Naruto - ʀᴇǫᴜᴇsᴛ ᴀɴ ᴀɴɪᴍᴇ (ʏᴏᴜʀ ʀᴇǫᴜᴇsᴛ ᴡɪʟʟ ʙᴇ sᴇɴᴛ ᴛᴏ ᴛʜᴇ ɢʀᴏᴜᴘ)\n"
     "/viewrequests - ᴠɪᴇᴡ ʏᴏᴜʀ ʀᴇǫᴜᴇsᴛs\n"
     "/cancel - ᴄᴀɴᴄᴇʟ ᴀɴʏ ᴏɴɢᴏɪɴɢ ᴀᴄᴛɪᴏɴ\n"
     "━━━━━━━━━━━━━━━━━━━━━━━━━━\n\n"
@@ -443,36 +441,53 @@ async def broadcast_send(update: Update, context: ContextTypes.DEFAULT_TYPE):
     message = update.message.reply_to_message or update.message
     reply_markup = message.reply_markup if message.reply_markup else None
 
+    caption = message.caption or ""
     sent, failed = 0, 0
 
     for user_id in users:
         try:
+            user_id = int(user_id)
+
             if message.photo:
                 await context.bot.send_photo(
-                    chat_id=int(user_id),
+                    chat_id=user_id,
                     photo=message.photo[-1].file_id,
-                    caption=message.caption or "",
+                    caption=caption,
                     reply_markup=reply_markup
                 )
             elif message.document:
                 await context.bot.send_document(
-                    chat_id=int(user_id),
+                    chat_id=user_id,
                     document=message.document.file_id,
-                    caption=message.caption or "",
+                    caption=caption,
+                    reply_markup=reply_markup
+                )
+            elif message.video:
+                await context.bot.send_video(
+                    chat_id=user_id,
+                    video=message.video.file_id,
+                    caption=caption,
+                    reply_markup=reply_markup
+                )
+            elif message.text:
+                await context.bot.send_message(
+                    chat_id=user_id,
+                    text=message.text,
                     reply_markup=reply_markup
                 )
             else:
-                await context.bot.send_message(
-                    chat_id=int(user_id),
-                    text=message.text or "",
-                    reply_markup=reply_markup
-                )
-            sent += 1
-        except Exception as e:
-            failed += 1
-            print(f"❌ғᴀɪʟᴇᴅ ᴛᴏ sᴇɴᴅ ᴛᴏ {user_id}: {e}")
+                # Unhandled media type
+                print(f"⚠️ᴜɴsᴜᴘᴘᴏʀᴛᴇᴅ ᴍᴇᴅɪᴀ ᴛʏᴘᴇ ғᴏʀ ᴜsᴇʀ {user_id}")
+                failed += 1
+                continue
 
-    await update.message.reply_text(f"✅ ʙʀᴏᴀᴅᴄᴀsᴛ ᴄᴏᴍᴘʟᴇᴛᴇ.\n sᴇɴᴛ: {sent}\n ғᴀɪʟᴇᴅ: {failed}")
+            sent += 1
+
+        except Exception as e:
+            print(f"❌ ғᴀɪʟᴇᴅ ᴛᴏ sᴇɴᴅ ᴛᴏ {user_id}: {e}")
+            failed += 1
+
+    await update.message.reply_text(f"✅ ʙʀᴏᴀᴅᴄᴀsᴛ ᴄᴏᴍᴘʟᴇᴛᴇ.\nsᴇɴᴛ: {sent}\nғᴀɪʟᴇᴅ: {failed}")
     return ConversationHandler.END
 
 # Cancel the conversation
