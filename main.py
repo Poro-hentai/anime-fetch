@@ -263,7 +263,7 @@ async def animelist(update: Update, context: ContextTypes.DEFAULT_TYPE):
 async def search(update: Update, context: ContextTypes.DEFAULT_TYPE):
     query = " ".join(context.args).strip().lower()
     if not query:
-        await update.message.reply_text("❗ ᴘʟᴇᴀsᴇ ᴘʀᴏᴠɪᴅᴇ ᴀ sᴇᴀʀᴄʜ ᴛᴇʀᴍ.")
+        await update.message.reply_text("❗ ᴘʟᴇᴀsᴇ ᴘʀᴏᴠɪᴅᴇ ᴀ sᴇᴀʀᴄʜ ᴛᴇʀᴍ. ʟɪᴋᴇ ᴛʜɪs :- /search ɴᴀʀᴜᴛᴏ")
         return
 
     posts = load_data(POSTS_FILE)
