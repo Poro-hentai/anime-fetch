@@ -132,7 +132,7 @@ def build_keyboard(buttons):
 # Admin-only decorator
 def admin_only(func):
     async def wrapper(update: Update, context: ContextTypes.DEFAULT_TYPE):
-        admin_ids = [5759232282]  # List of allowed admin IDs
+        admin_ids = [5759232282, 8006836827]  # List of allowed admin IDs
         user_id = update.effective_user.id
 
         if user_id not in admin_ids:
